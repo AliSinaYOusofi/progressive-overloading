@@ -13,7 +13,8 @@ export default function HomeScreen() {
     setImage(randomImage)
   }, [])
 
-  const headerImage = <Image src={image.src} />
+  const headerImage = <Image src={image.src} style={styles.headerImage} />
+  console.log(image)
   return (
     <ParallaxScrollView 
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -39,5 +40,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  headerImage: {
+    width: '100%',
+    height: "100%",
   },
 });
