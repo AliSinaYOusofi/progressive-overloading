@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Pressable, StyleSheet, View, useColorScheme } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Pressable, StyleSheet, ToastAndroid, View, useColorScheme } from 'react-native'
 import { TextInput } from 'react-native'
 import { ThemedView } from '../ThemedView'
 import { TouchableOpacity } from 'react-native'
 import { ThemedText } from '../ThemedText'
 import { Ionicons } from '@expo/vector-icons'
+import { progressive_overloading } from '@/db/sqlitedb'
 
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
@@ -13,15 +14,73 @@ export type typeToggleModal = {
 export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
     const colorScheme = useColorScheme()
-    const [exerciseName, setExerciseName] = useState("")
-    const [exerciseDescription, setExerciseDescription] = useState("")
-    const [numberOfReps, setNumberOfReps] = useState("")
-    const [numberOfSets, setNumberOfSets] = useState("")
-    const [weight, setWeight] = useState("")
+    const [exerciseName, setExerciseName] = useState<string>("")
+    const [exerciseDescription, setExerciseDescription] = useState<string>("")
+    const [numberOfReps, setNumberOfReps] = useState<any>(0)
+    const [numberOfSets, setNumberOfSets] = useState<any>(0)
+    const [weight, setWeight] = useState<any>(0)
+    const [weightType, setWeightType] = useState<string>("kg")
+
+    const addNewExercise = async () : Promise<void> => {
+        // validate every field and show toast messages if wrong
+        // add new exercise to database
+        // close modal
+
+        // start validating fields
+        if (exerciseName === "") {
+            ToastAndroid.show("Please enter an exercise name", ToastAndroid.LONG)
+            return
+        }
+
+        else if (typeof numberOfSets !== "number" && ! isNaN(numberOfSets) && numberOfSets <= 0) {
+            ToastAndroid.show("Please enter a valid set", ToastAndroid.LONG)
+            return
+        }
+        
+        else if (typeof numberOfReps !== "number" && ! isNaN(numberOfReps) && numberOfReps <= 0) {
+            ToastAndroid.show("Please enter a valid rep", ToastAndroid.LONG)
+            return
+        }
+
+        // insert data 
+
+        let statement = await progressive_overloading.prepareAsync("INSERT INOT progressive_overloading VALUES(?, ?, ?, ?, ?, ?");
+        const result = await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight])
+
+    }
+
+    useEffect( () => {
+        const createTable = async () : Promise<void> => {
+            
+            // create table in database
+
+            try {
+                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    exercise_name TEXT,
+                    exercise_description TEXT,
+                    sets INTEGER,
+                    reps INTEGER,
+                    weight INTEGER,
+                    weight_type TEXT,
+                    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );`)
+                
+            } 
+            
+            catch (error) {
+                console.error("error creating table", error)
+                ToastAndroid.show("failed to create table", ToastAndroid.LONG)
+            }
+            
+        }
+
+        createTable()
+    }, [])
 
     return (
         <View style={[styles.modalContainer, ]}>
-            <ThemedView style={[styles.popup_options_container]}>
+            <View style={[styles.popup_options_container, {backgroundColor: colorScheme === "dark" ? '#282C35' : 'black'}]}>
             
                 <View style={[styles.inputs, { marginTop: 50}]}>
                     
@@ -50,30 +109,31 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                         value={numberOfSets}
                         onChangeText={text => setNumberOfSets(text)}
                         placeholder='Sets'
-                        style={{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: "40%", padding: 10}}
+                        keyboardType='numeric'
+                        style={{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: "40%", padding: 10, borderRadius: 4}}
                     />
 
                     <TextInput
                         value={numberOfReps}
                         onChangeText={text => setNumberOfReps(text)}
                         placeholder='Reps'
-                        style={[{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: '40%', padding: 10}]} 
+                        keyboardType='numeric'
+                        style={[{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: '40%', padding: 10, borderRadius: 4}]} 
                     />
                 </View>
 
-                <View>
+                <View style={styles.inputs}>
                     <TextInput
-                        
-                        value={exerciseName}
-                        onChangeText={text => setExerciseName(text)}
+                        value={weight}
+                        onChangeText={text => setWeight(text)}
                         placeholder='weight'
+                        keyboardType='numeric'
                         style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}
-                        
                     />
                 </View>
             
-                <ThemedView style={[styles.container, styles.inputs, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
-                    <TouchableOpacity >
+                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
+                    <TouchableOpacity onPress={addNewExercise}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Add Exercise
                         </ThemedText>
@@ -90,7 +150,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                         color="black" 
                     />
                 </Pressable>
-            </ThemedView>
+            </View>
         </View>
     )
 }
@@ -112,7 +172,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         borderTopRightRadius: 10,
-        borderTopLeftRadius: 10
+        borderTopLeftRadius: 10,
     },
 
     inputs: {
@@ -128,13 +188,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        columnGap: 10
+        columnGap: 20
     },
 
     container: {
         padding: 10,
         borderRadius: 4,
-        marginTop: 10
+        marginTop: 10,
+        width: "70%",
+        marginBottom: 3
     },
 
     text: {
