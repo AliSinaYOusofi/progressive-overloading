@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native'
 import { ThemedText } from '../ThemedText'
 import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
+import { Picker } from '@react-native-picker/picker'
 
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
@@ -44,9 +45,13 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
         // insert data 
 
-        let statement = await progressive_overloading.prepareAsync("INSERT INOT progressive_overloading VALUES(?, ?, ?, ?, ?, ?");
-        const result = await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight])
-
+        console.log(exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType)
+        // current date and time
+        const currentDate = new Date().toLocaleString()
+        let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, date) VALUES(?, ?, ?, ?, ?, ?, ?)");
+        const result = await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType, currentDate])
+        ToastAndroid.show("Exercise added", ToastAndroid.LONG)
+        toggleModal(false)
     }
 
     useEffect( () => {
@@ -122,14 +127,28 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                     />
                 </View>
 
-                <View style={styles.inputs}>
-                    <TextInput
-                        value={weight}
-                        onChangeText={text => setWeight(text)}
-                        placeholder='weight'
-                        keyboardType='numeric'
-                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}
-                    />
+                <View style={[styles.inputs, {flexDirection: 'row'}]}>
+
+                    <View style={{width: "60%"}}>
+                        <TextInput
+                            value={weight}
+                            onChangeText={text => setWeight(text)}
+                            placeholder='weight'
+                            keyboardType='numeric'
+                            style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}
+                        />
+                    </View>
+                    <View style={{width: "35%"}}>
+                        <Picker
+                            selectedValue={weightType}
+                            onValueChange={(itemValue) => setWeightType(itemValue)}
+                            style={[styles.inputs, { backgroundColor: colorScheme === 'dark' ? 'white' : 'black', borderRadius: 14, }]}
+                            >
+                            <Picker.Item label="kg" value="kg" />
+                            <Picker.Item label="lb" value="lb" />
+                            <Picker.Item label="other" value="other" />
+                        </Picker>
+                    </View>
                 </View>
             
                 <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
@@ -216,5 +235,9 @@ const styles = StyleSheet.create({
 
     weight: {
         width: "80%"
-    }
+    },
+
+    pickerContainer: {
+        flex: 1,
+      },
 })

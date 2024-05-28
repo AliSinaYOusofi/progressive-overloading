@@ -14,7 +14,7 @@ export default function HomeScreen() {
   }, [])
 
   const headerImage = <Image src={image.src} style={styles.headerImage} />
-  console.log(image)
+
   return (
     <ParallaxScrollView 
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
