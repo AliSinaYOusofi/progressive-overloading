@@ -1,6 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, useColorScheme } from 'react-native';
 import { ThemedView } from '../ThemedView';
+import { MaterialIcons } from '@expo/vector-icons';
+import { ThemedText } from '../ThemedText';
+import DeleteWorkout from '../Modals/DeleteWorkout';
+import UpdateWorkout from '../Modals/UpdateWorkout';
 
 type Workout = {
     id: number;
@@ -19,25 +23,51 @@ type WorkoutCardProps = {
 };
 
 const WorkoutCard = ({ workout }: WorkoutCardProps) => {
-    return (
-        <View style={styles.card}>
-            <Text style={styles.title}>{workout.exercise_name}</Text>
-            <Text style={styles.description}>{workout.exercise_description}</Text>
-            <Text style={styles.detail}>Sets: {workout.sets}</Text>
-            <Text style={styles.detail}>Reps: {workout.reps}</Text>
-            <Text style={styles.detail}>
-                Weight: {workout.weight} {workout.weight_type}
-            </Text>
-            <Text style={styles.date}>Date: {new Date(workout.date).toLocaleString()}</Text>
-            
-            <TouchableOpacity style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>Edit</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.closeButton}>
-                <Text> Delete</Text>
-            </TouchableOpacity>
-        </View>
+    const [deleteModal, setDeleteModal] = useState<boolean>(false)
+    const [updateModal, setUpdateModal] = useState<boolean>(false)
+
+    const colorScheme = useColorScheme()
+
+    return (
+        <>
+            <View style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#060B17" : "white"}]}>
+                <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
+                <ThemedText style={styles.description}>{workout.exercise_description}</ThemedText>
+                <ThemedText style={styles.detail}>Sets: {workout.sets}</ThemedText>
+                <ThemedText style={styles.detail}>Reps: {workout.reps}</ThemedText>
+                <ThemedText style={styles.detail}>
+                    Weight: {workout.weight} {workout.weight_type}
+                </ThemedText>
+                <ThemedText style={styles.date}>Date: {workout.date}</ThemedText>
+                
+                <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.closeButton, { backgroundColor: "#355e3b"}]}>
+                    <ThemedText style={[styles.closeButtonText, ]}>Edit</ThemedText>
+                    <MaterialIcons name="mode-edit-outline" size={24} color={colorScheme === "dark" ? "white" : "black"} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => setDeleteModal(true)} style={[styles.closeButton, { backgroundColor: "#c04000"}]}>
+                    <ThemedText style={[styles.closeButtonText, ]}> Delete </ThemedText>
+                    <MaterialIcons name="delete-outline" size={24} color={colorScheme === "dark" ? "white" : "black"} />
+                </TouchableOpacity>
+            </View>
+
+            <Modal
+                animationType="fade"
+                visible={deleteModal}
+                transparent={true}
+            >
+                <DeleteWorkout toggleModal={setDeleteModal} id={workout.id}/>
+            </Modal>
+
+            <Modal
+                animationType='fade'
+                transparent={true}
+                visible={updateModal}
+            >
+                <UpdateWorkout toggleModal={setUpdateModal} workout={workout}/>
+            </Modal>
+        </>
     );
 };
 
@@ -45,7 +75,7 @@ export default WorkoutCard;
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#fff',
+        
         borderRadius: 10,
         padding: 20,
         margin: 10,
@@ -79,6 +109,8 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     closeButtonText: {
         color: '#fff',

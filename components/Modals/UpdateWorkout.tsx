@@ -7,22 +7,39 @@ import { ThemedText } from '../ThemedText'
 import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { Picker } from '@react-native-picker/picker'
+import { useAppContext } from '@/context/ContextProvider'
 
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
 }
 
-export default function AddExercisePopup({toggleModal} : typeToggleModal) {
+type workoutProps = {
+    id: number,
+    exercise_name: string,
+    exercise_description: string,
+    sets: number,
+    reps: number,
+    weight: number,
+    weight_type: string,
+}
+export type updateWorkout = {
+    toggleModal: (toggle : boolean) => void;
+    workout: workoutProps
+}
+
+export default function UpdateWorkout({toggleModal, workout} : updateWorkout) {
 
     const colorScheme = useColorScheme()
-    const [exerciseName, setExerciseName] = useState<string>("")
-    const [exerciseDescription, setExerciseDescription] = useState<string>("")
-    const [numberOfReps, setNumberOfReps] = useState<any>(0)
-    const [numberOfSets, setNumberOfSets] = useState<any>(0)
-    const [weight, setWeight] = useState<any>(0)
-    const [weightType, setWeightType] = useState<string>("kg")
+    const [exerciseName, setExerciseName] = useState<string>(workout.exercise_name)
+    const [exerciseDescription, setExerciseDescription] = useState<string>(workout.exercise_description)
+    const [numberOfReps, setNumberOfReps] = useState<any>(workout.reps.toString())
+    const [numberOfSets, setNumberOfSets] = useState<any>(workout.sets.toString())
+    const [weight, setWeight] = useState<any>(workout.weight.toString())
+    const [weightType, setWeightType] = useState<string>(workout.weight_type.toString())
 
-    const addNewExercise = async () : Promise<void> => {
+    const { setRefreshDatabaseFetch } = useAppContext()
+
+    const updateExercise = async () : Promise<void> => {
         // validate every field and show toast messages if wrong
         // add new exercise to database
         // close modal
@@ -47,41 +64,19 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
         console.log(exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType)
         // current date and time
+        // update the table entry
         const currentDate = new Date().toLocaleString()
-        let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, date) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        const result = await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType, currentDate])
-        ToastAndroid.show("Exercise added", ToastAndroid.LONG)
+        let statement = await progressive_overloading.prepareAsync("UPDATE progressive_overloading SET exercise_name = ?, exercise_description = ?, sets = ?, reps = ?, weight = ?, weight_type = ?, date = ? WHERE id = ?");
+        
+        await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType, currentDate, workout.id])
+        ToastAndroid.show("Exercise updated", ToastAndroid.LONG)
+        
+        setRefreshDatabaseFetch( prev => ! prev)
         toggleModal(false)
+
     }
 
-    useEffect( () => {
-        const createTable = async () : Promise<void> => {
-            
-            // create table in database
-
-            try {
-                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    exercise_name TEXT,
-                    exercise_description TEXT,
-                    sets INTEGER,
-                    reps INTEGER,
-                    weight INTEGER,
-                    weight_type TEXT,
-                    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );`)
-                
-            } 
-            
-            catch (error) {
-                console.error("error creating table", error)
-                ToastAndroid.show("failed to create table", ToastAndroid.LONG)
-            }
-            
-        }
-
-        createTable()
-    }, [])
+    
 
     return (
         <View style={[styles.modalContainer, ]}>
@@ -111,9 +106,9 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                 <View style={styles.exercise_details}>
                     
                     <TextInput
+                        placeholder='Sets'
                         value={numberOfSets}
                         onChangeText={text => setNumberOfSets(text)}
-                        placeholder='Sets'
                         keyboardType='numeric'
                         style={{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: "40%", padding: 10, borderRadius: 4}}
                     />
@@ -152,9 +147,9 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                 </View>
             
                 <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
-                    <TouchableOpacity onPress={addNewExercise}>
+                    <TouchableOpacity onPress={updateExercise}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
-                            Add Exercise
+                            Update Exercise
                         </ThemedText>
                     </TouchableOpacity>
                 </ThemedView>
