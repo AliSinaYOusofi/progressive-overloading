@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { progressive_overloading } from '@/db/sqlitedb';
 
 import WorkoutCard from '@/components/cards/Workout';
+import { useAppContext } from '@/context/ContextProvider';
 
 type Workout = {
   id: number;
@@ -21,6 +22,7 @@ type Workout = {
 
 export default function TabTwoScreen() {
   const [ workouts, setWorkouts] = useState<Workout[]>([])
+  const { refreshDatabaseFetch } = useAppContext()
 
   useEffect( () => {
     const fetchWorkout = async ()  => {
@@ -34,7 +36,8 @@ export default function TabTwoScreen() {
   }
 
   fetchWorkout()
-  }, [])
+  }, [refreshDatabaseFetch])
+  
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
