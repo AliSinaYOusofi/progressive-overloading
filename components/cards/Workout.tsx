@@ -14,42 +14,50 @@ type Workout = {
     reps: number;
     weight: number;
     weight_type: string;
-    date: string;
+    created: string;
+    future_sets: number;
+    future_reps: number;
+    future_weight: number;
 };
 
 type WorkoutCardProps = {
     workout: Workout;
-    
 };
 
 const WorkoutCard = ({ workout }: WorkoutCardProps) => {
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [updateModal, setUpdateModal] = useState<boolean>(false);
 
-    const [deleteModal, setDeleteModal] = useState<boolean>(false)
-    const [updateModal, setUpdateModal] = useState<boolean>(false)
-
-    const colorScheme = useColorScheme()
+    const colorScheme = useColorScheme();
 
     return (
         <>
-            <View style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#060B17" : "white"}]}>
+            <View style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }]}>
                 <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
-                <ThemedText style={styles.description}>{workout.exercise_description}</ThemedText>
-                <ThemedText style={styles.detail}>Sets: {workout.sets}</ThemedText>
-                <ThemedText style={styles.detail}>Reps: {workout.reps}</ThemedText>
-                <ThemedText style={styles.detail}>
-                    Weight: {workout.weight} {workout.weight_type}
-                </ThemedText>
-                <ThemedText style={styles.date}>Date: {workout.date}</ThemedText>
-                
-                <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.closeButton, { backgroundColor: "#355e3b"}]}>
-                    <ThemedText style={[styles.closeButtonText, ]}>Edit</ThemedText>
-                    <MaterialIcons name="mode-edit-outline" size={24} color={colorScheme === "dark" ? "white" : "black"} />
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => setDeleteModal(true)} style={[styles.closeButton, { backgroundColor: "#c04000"}]}>
-                    <ThemedText style={[styles.closeButtonText, ]}> Delete </ThemedText>
-                    <MaterialIcons name="delete-outline" size={24} color={colorScheme === "dark" ? "white" : "black"} />
-                </TouchableOpacity>
+                <ThemedText style={[styles.subtitle, { color: colorScheme === "dark" ? "#c0c0c0" : "#333" }]}>Current:</ThemedText>
+                <View style={styles.detailContainer}>
+                    <ThemedText style={styles.detail}>Notes : {workout.exercise_description}</ThemedText>
+                    <ThemedText style={styles.detail}>Sets : {workout.sets}</ThemedText>
+                    <ThemedText style={styles.detail}>Reps : {workout.reps}</ThemedText>
+                    <ThemedText style={styles.detail}>Weight : {workout.weight} {workout.weight_type}</ThemedText>
+                </View>
+                <ThemedText style={[styles.subtitle, { color: colorScheme === "dark" ? "#c0c0c0" : "#333" }]}>To:</ThemedText>
+                <View style={styles.detailContainer}>
+                    <ThemedText style={styles.detail}>Sets : {workout.future_sets}</ThemedText>
+                    <ThemedText style={styles.detail}>Reps : {workout.future_reps}</ThemedText>
+                    <ThemedText style={styles.detail}>Weight : {workout.future_weight} {workout.weight_type}</ThemedText>
+                </View>
+                <ThemedText style={styles.date}>Date: {workout.created}</ThemedText>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.button, styles.editButton]}>
+                        <MaterialIcons name="mode-edit-outline" size={24} color="white" />
+                        <ThemedText style={styles.buttonText}>Edit</ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setDeleteModal(true)} style={[styles.button, styles.deleteButton]}>
+                        <MaterialIcons name="delete-outline" size={24} color="white" />
+                        <ThemedText style={styles.buttonText}>Delete</ThemedText>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <Modal
@@ -75,7 +83,6 @@ export default WorkoutCard;
 
 const styles = StyleSheet.create({
     card: {
-        
         borderRadius: 10,
         padding: 20,
         margin: 10,
@@ -89,32 +96,50 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
+        color: '#4a4a4a',
     },
-    description: {
-        fontSize: 16,
+    subtitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: 5,
+    },
+    detailContainer: {
         marginBottom: 10,
     },
     detail: {
         fontSize: 16,
         marginBottom: 5,
+        color: '#6b6b6b',
     },
     date: {
         fontSize: 14,
         color: '#888',
         marginTop: 10,
     },
-    closeButton: {
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginTop: 20,
-        backgroundColor: '#007BFF',
+    },
+    button: {
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        flex: 1,
+        margin: 5,
     },
-    closeButtonText: {
+    editButton: {
+        backgroundColor: '#355e3b',
+    },
+    deleteButton: {
+        backgroundColor: '#c04000',
+    },
+    buttonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+        marginLeft: 5,
     },
 });

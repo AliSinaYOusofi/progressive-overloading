@@ -8,6 +8,7 @@ import { progressive_overloading } from '@/db/sqlitedb';
 
 import WorkoutCard from '@/components/cards/Workout';
 import { useAppContext } from '@/context/ContextProvider';
+import NoWorkoutsAdded from '@/components/cards/NoWorkoutsAdded';
 
 type Workout = {
   id: number;
@@ -17,7 +18,12 @@ type Workout = {
   reps: number;
   weight: number;
   weight_type: string;
-  date: string;
+  created: string;
+  weightType: string,
+  future_sets: number,
+  future_reps: number,
+  future_weight: number,
+  achevied: number
 };
 
 export default function TabTwoScreen() {
@@ -37,15 +43,19 @@ export default function TabTwoScreen() {
 
   fetchWorkout()
   }, [refreshDatabaseFetch])
-  
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       {
+        workouts.length > 0
+        ?
         workouts.map( (workout, index) => (
           <WorkoutCard key={index} workout={workout} />
         ))
+        :
+        <NoWorkoutsAdded />
       }
     </ParallaxScrollView>
   );
