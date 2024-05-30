@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, StyleSheet, ToastAndroid, View, useColorScheme } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, ToastAndroid, View, useColorScheme } from 'react-native'
 import { TextInput } from 'react-native'
 import { ThemedView } from '../ThemedView'
 import { TouchableOpacity } from 'react-native'
@@ -7,6 +7,7 @@ import { ThemedText } from '../ThemedText'
 import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { Picker } from '@react-native-picker/picker'
+import { useAppContext } from '@/context/ContextProvider'
 
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
@@ -17,10 +18,16 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
     const colorScheme = useColorScheme()
     const [exerciseName, setExerciseName] = useState<string>("")
     const [exerciseDescription, setExerciseDescription] = useState<string>("")
-    const [numberOfReps, setNumberOfReps] = useState<any>(0)
-    const [numberOfSets, setNumberOfSets] = useState<any>(0)
-    const [weight, setWeight] = useState<any>(0)
+    const [currentNumberOfReps, setCurrentNumberOfReps] = useState<any>(0)
+    const [currentNumberOfSets, setCurrentNumberofSets] = useState<any>(0)
+    const [currentWeight, setCurrentWeight] = useState<any>(0)
     const [weightType, setWeightType] = useState<string>("kg")
+
+    const [ futureNumberOfReps, setFutureNumberOfReps] = useState<any>(0)
+    const [ futureNumberOfSets, setFutureNumberOfSets] = useState<any>(0)
+    const [ futureWeight, setFutureWeight] = useState<any>(0)
+
+    const { setRefreshDatabaseFetch } = useAppContext()
 
     const addNewExercise = async () : Promise<void> => {
         // validate every field and show toast messages if wrong
@@ -33,23 +40,49 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
             return
         }
 
-        else if (typeof numberOfSets !== "number" && ! isNaN(numberOfSets) && numberOfSets <= 0) {
+        else if (typeof currentNumberOfSets !== "number" && ! isNaN(currentNumberOfSets) && currentNumberOfSets <= 0) {
             ToastAndroid.show("Please enter a valid set", ToastAndroid.LONG)
             return
         }
         
-        else if (typeof numberOfReps !== "number" && ! isNaN(numberOfReps) && numberOfReps <= 0) {
+        else if (typeof currentNumberOfReps !== "number" && ! isNaN(currentNumberOfReps) && currentNumberOfReps <= 0) {
+            ToastAndroid.show("Please enter a valid rep", ToastAndroid.LONG)
+            return
+        }
+
+        else if (typeof currentWeight !== "number" && ! isNaN(currentWeight) && currentWeight <= 0) {
+            ToastAndroid.show("Please enter a valid weight", ToastAndroid.LONG)
+            return
+        }
+
+        else if (weightType === "") {
+            ToastAndroid.show("Please select a weight type", ToastAndroid.LONG)
+            return
+        }
+
+        else if ( typeof futureWeight !== "number" && ! isNaN(futureWeight) && futureWeight <= 0) {
+            ToastAndroid.show("Please enter a valid weight", ToastAndroid.LONG)
+            return
+        }
+
+        else if ( typeof futureNumberOfSets !== "number" && ! isNaN(futureNumberOfSets) && futureNumberOfSets <= 0) {
+            ToastAndroid.show("Please enter a valid set", ToastAndroid.LONG)
+            return
+        }
+
+        else if ( typeof futureNumberOfReps !== "number" && ! isNaN(futureNumberOfReps) && futureNumberOfReps <= 0) {
             ToastAndroid.show("Please enter a valid rep", ToastAndroid.LONG)
             return
         }
 
         // insert data 
 
-        console.log(exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType)
+        console.log(exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType)
         // current date and time
-        const currentDate = new Date().toLocaleString()
-        let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, date) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        const result = await statement.executeAsync([exerciseName, exerciseDescription, numberOfSets, numberOfReps, weight, weightType, currentDate])
+        const currentDate = new Date().toISOString();
+        let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, future_sets, future_reps, future_weight, created, updated, acheived) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        const result = await statement.executeAsync([exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType, futureNumberOfReps, futureNumberOfSets, futureWeight, currentDate, currentDate, 0])
+        setRefreshDatabaseFetch( prev => ! prev)
         ToastAndroid.show("Exercise added", ToastAndroid.LONG)
         toggleModal(false)
     }
@@ -60,6 +93,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
             // create table in database
 
             try {
+                // await progressive_overloading.execAsync("DROP TABLE IF EXISTS progressive_overloading")
                 await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     exercise_name TEXT,
@@ -68,8 +102,15 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                     reps INTEGER,
                     weight INTEGER,
                     weight_type TEXT,
-                    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    future_sets INTEGER,
+                    future_reps INTEGER,
+                    future_weight INTEGER,
+                    created TIMESTAMP,
+                    updated TIMESTAMP,
+                    acheived INTEGER
                 );`)
+
+                console.log("table created")
                 
             } 
             
@@ -84,8 +125,10 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
     }, [])
 
     return (
-        <View style={[styles.modalContainer, ]}>
-            <View style={[styles.popup_options_container, {backgroundColor: colorScheme === "dark" ? '#060B17' : 'white'}]}>
+        <KeyboardAvoidingView style={[styles.modalContainer, ]}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        >
+            <View style={[styles.popup_options_container, { backgroundColor: colorScheme === 'dark' ? '#333' : '#fff' }]}>
             
                 <View style={[styles.inputs, { marginTop: 50}]}>
                     
@@ -93,7 +136,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                         placeholder='exercise name'
                         value={exerciseName}
                         onChangeText={text => setExerciseName(text)}
-                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}
+                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2'}]}
                         
                     />
                 </View>
@@ -101,48 +144,85 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                 <View style={styles.inputs}>
                     
                     <TextInput
-                        placeholder='exercise description'
+                        placeholder='Notes'
                         value={exerciseDescription}
                         onChangeText={text => setExerciseDescription(text)}
-                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}
+                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2'}]}
                     />
                 </View>
 
-                <View style={styles.exercise_details}>
-                    
-                    <TextInput
-                        value={numberOfSets}
-                        onChangeText={text => setNumberOfSets(text)}
-                        placeholder='Sets'
-                        keyboardType='numeric'
-                        style={{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: "40%", padding: 10, borderRadius: 4}}
-                    />
+                <View style={styles.current_and_future_details}>
 
+                    <ThemedText style={styles.current_and_future_text}> Current </ThemedText>
+                    <View style={styles.exercise_details}>
+                        <TextInput
+                            value={currentNumberOfSets}
+                            onChangeText={text => setCurrentNumberofSets(text)}
+                            placeholder='Sets'
+                            keyboardType='numeric'
+                            style={{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: "40%", padding: 10, borderRadius: 4}}
+                        />
+
+                        <TextInput
+                            value={currentNumberOfReps}
+                            onChangeText={text => setCurrentNumberOfReps(text)}
+                            placeholder='Reps'
+                            keyboardType='numeric'
+                            style={[{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: '40%', padding: 10, borderRadius: 4}]} 
+                        />
+                    </View>
+                    
+                </View>
+
+                <View style={[styles.inputs, {flexDirection: 'row'}]}>
                     <TextInput
-                        value={numberOfReps}
-                        onChangeText={text => setNumberOfReps(text)}
-                        placeholder='Reps'
+                        value={currentWeight}
+                        onChangeText={text => setCurrentWeight(text)}
+                        placeholder='weight'
                         keyboardType='numeric'
-                        style={[{backgroundColor: colorScheme === "dark" ? 'white' : 'black', width: '40%', padding: 10, borderRadius: 4}]} 
+                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', borderRadius: 4,}]}
                     />
+                </View>
+
+                <View style={styles.current_and_future_details}>
+
+                    <ThemedText style={styles.current_and_future_text}> To </ThemedText>
+                    <View style={styles.exercise_details}>
+                        <TextInput
+                            value={futureNumberOfSets}
+                            onChangeText={text => setFutureNumberOfSets(text)}
+                            placeholder='Sets'
+                            keyboardType='numeric'
+                            style={{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: "40%", padding: 10, borderRadius: 4}}
+                        />
+
+                        <TextInput
+                            value={futureNumberOfReps}
+                            onChangeText={text => setFutureNumberOfReps(text)}
+                            placeholder='Reps'
+                            keyboardType='numeric'
+                            style={[{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: '40%', padding: 10, borderRadius: 4}]} 
+                        />
+                    </View>
+                    
                 </View>
 
                 <View style={[styles.inputs, {flexDirection: 'row'}]}>
 
                     <View style={{width: "60%"}}>
                         <TextInput
-                            value={weight}
-                            onChangeText={text => setWeight(text)}
+                            value={futureWeight}
+                            onChangeText={text => setFutureWeight(text)}
                             placeholder='weight'
                             keyboardType='numeric'
-                            style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}
+                            style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', borderRadius: 4,}]}
                         />
                     </View>
                     <View style={{width: "35%"}}>
                         <Picker
                             selectedValue={weightType}
                             onValueChange={(itemValue) => setWeightType(itemValue)}
-                            style={[styles.inputs, { backgroundColor: colorScheme === 'dark' ? 'white' : 'black', borderRadius: 14, }]}
+                            style={[styles.inputs, { backgroundColor: colorScheme === 'dark' ? 'white' : '#F6F5F2', borderRadius: 14, }]}
                             >
                             <Picker.Item label="kg" value="kg" />
                             <Picker.Item label="lb" value="lb" />
@@ -161,16 +241,16 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
                 <Pressable 
                     onPress={() => toggleModal(false)}
-                    style={[styles.pressable]}
+                    style={[styles.pressable, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}
                 >
                     <Ionicons 
                         name="close-outline" 
                         size={20} 
-                        color="black" 
+                        color={colorScheme !== "dark" ? 'white' : 'black'}
                     />
                 </Pressable>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -192,6 +272,11 @@ const styles = StyleSheet.create({
         width: '100%',
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
 
     inputs: {
@@ -215,7 +300,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginTop: 10,
         width: "70%",
-        marginBottom: 3
+        marginBottom: 10
     },
 
     text: {
@@ -225,7 +310,7 @@ const styles = StyleSheet.create({
     pressable: {
         position: 'absolute',
         zIndex: 1,
-        backgroundColor: "white",
+        
         padding: 5,
         borderRadius: 50,
         color: "black",
@@ -239,5 +324,21 @@ const styles = StyleSheet.create({
 
     pickerContainer: {
         flex: 1,
-      },
+    },
+
+    current_and_future_details: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        width: '100%',
+        columnGap: 20
+    },
+
+    current_and_future_text : {
+        fontWeight: "bold",
+        fontSize: 16,
+        marginBottom: 10,
+        marginLeft: "7%",
+        marginTop: 10
+    }
 })

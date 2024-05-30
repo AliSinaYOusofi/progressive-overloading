@@ -10,7 +10,7 @@ export default function AddExerciseButton() {
     // redirect to aadd new workout page or popup
     const navigation = useNavigation()
     const colorScheme = useColorScheme();
-    const [popup, setPopup] = useState()
+    const [popup, setPopup] = useState(false)
 
     const displayAddNewExercisePopup = () => {
         setPopup(true)

@@ -6,10 +6,13 @@ import { ThemedView } from '../ThemedView'
 import WorkoutCards from './WorkoutCards'
 import AddExerciseButton from './AddExerciseButton'
 import { progressive_overloading } from '@/db/sqlitedb'
+import { useAppContext } from '@/context/ContextProvider'
+import NoWorkoutsAdded from '../cards/NoWorkoutsAdded'
 
 export default function WorkoutTracker() {
 
     const [workouts, setWorkouts] = useState([])
+    const { refreshDatabaseFetch } = useAppContext()
 
     useEffect( () => {
         // fetch workouts from database
@@ -24,11 +27,15 @@ export default function WorkoutTracker() {
         }
 
         fetchWorkout()
-    }, [])
+    }, [refreshDatabaseFetch])
+
     return (
         <ThemedView style={styles.container}>
             <ThemedText style={styles.workout_text}> Workout Tracker</ThemedText>
             {
+                workouts.length
+                ?
+
                 workouts.map(workout => <WorkoutCards
                     key={workout.id} 
                     exerciseName={workout.exercise_name}
@@ -38,6 +45,8 @@ export default function WorkoutTracker() {
                     weightType={workout.weight_type}
                     />
                 )
+                :
+                <NoWorkoutsAdded />
             }
             <AddExerciseButton />
         </ThemedView>
