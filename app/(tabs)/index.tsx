@@ -4,6 +4,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { getRandomImage } from '@/utils/randomImageIndexGenerator';
+import GoalSetting from '@/components/home/GoalSetting';
 
 export default function HomeScreen() {
   const [image, setImage] = useState({src: "", name: ""});
@@ -20,6 +21,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={headerImage}>
       <WorkoutTracker />
+      <GoalSetting />
     </ParallaxScrollView>
   );
 }

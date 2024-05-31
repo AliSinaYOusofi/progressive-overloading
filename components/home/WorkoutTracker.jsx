@@ -31,7 +31,7 @@ export default function WorkoutTracker() {
 
     return (
         <ThemedView style={styles.container}>
-            <ThemedText style={styles.workout_text}> Workout Tracker</ThemedText>
+            <ThemedText style={styles.workout_text}> 1. Progressie Overloading </ThemedText>
             {
                 workouts.length
                 ?
