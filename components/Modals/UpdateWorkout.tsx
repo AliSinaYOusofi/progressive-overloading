@@ -26,6 +26,7 @@ type workoutProps = {
     future_weight: number,
     
 }
+
 export type updateWorkout = {
     toggleModal: (toggle : boolean) => void;
     workout: workoutProps

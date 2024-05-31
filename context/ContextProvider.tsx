@@ -3,8 +3,11 @@ import React, { ReactNode, createContext, useContext, useState } from "react";
 
 interface ContextType  {
     refreshDatabaseFetch: boolean,
-    setRefreshDatabaseFetch: React.Dispatch<React.SetStateAction<boolean>>
+    setRefreshDatabaseFetch: React.Dispatch<React.SetStateAction<boolean>>,
+    refreshGoalsDatabase: boolean,
+    setRefreshGoalsDatabase: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 const Context = createContext<ContextType | undefined>(undefined);
 
 interface ContextProviderProps{
@@ -13,13 +16,16 @@ interface ContextProviderProps{
 export const ContextProvider = ({children} : ContextProviderProps ) => {
     
     const [ refreshDatabaseFetch, setRefreshDatabaseFetch] = useState<boolean>(false);
+    const [ refreshGoalsDatabase, setRefreshGoalsDatabase] = useState<boolean>(false);
 
     return (
     
         <Context.Provider
             value={{
                 refreshDatabaseFetch,
-                setRefreshDatabaseFetch
+                setRefreshDatabaseFetch,
+                refreshGoalsDatabase,
+                setRefreshGoalsDatabase
             }}
         >
         {

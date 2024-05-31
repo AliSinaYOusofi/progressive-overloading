@@ -36,6 +36,18 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="goals"
+        options={{
+          title: 'Goals',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'trail-sign' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
+
+      
     </Tabs>
   );
 }
