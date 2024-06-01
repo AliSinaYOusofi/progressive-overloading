@@ -7,6 +7,7 @@ import AddGoalsPopup from '../Modals/AddGoalsPopup'
 import AddGoalsButton from '../home/AddGoalsButton'
 import { progressive_overloading } from '@/db/sqlitedb'
 import MinimalGoalCard from '../cards/MinimalGoalCard'
+import { useAppContext } from '@/context/ContextProvider'
 
 export type Goal = {
     id: number,
@@ -17,11 +18,12 @@ export type Goal = {
     created: Date,
     updated: Date,
     achevied: number
-    
+    complete_in: string
 }
 export default function GoalSetting() {
     
     const [goals, setGoals] = useState<Goal[]>([])
+    const { refreshGoalsDatabase } = useAppContext()
 
     useEffect( () => {
         const fetchGoals = async () : Promise<void> => {
@@ -34,14 +36,15 @@ export default function GoalSetting() {
             }
         }
         fetchGoals()
-    }, [])
+    }, [refreshGoalsDatabase])
+    
     return (
         <ThemedView style={styles.container}>
             <ThemedText style={styles.goal_text}> 2. Goals </ThemedText>
             {
                 goals.length
                 ?
-                goals.map(item => <MinimalGoalCard goalTitle={item.goal_title} description={item.description} timeToComplete={item.time_to_complete} created={item.created} updated={item.updated} achieved={item.achevied} remindMe={item.remind_me}/>)
+                goals.map((item, index) => <MinimalGoalCard goal_index={index} complete_in={item.complete_in} key={item.id} goalTitle={item.goal_title} description={item.description} timeToComplete={item.time_to_complete} created={item.created} updated={item.updated} achieved={item.achevied} remindMe={item.remind_me}/>)
                 :
                 <NoGoalsAdded />
             }

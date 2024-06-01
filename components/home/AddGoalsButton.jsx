@@ -14,25 +14,25 @@ export default function AddGoalsButton() {
     const colorScheme = useColorScheme();
     const [popup, setPopup] = useState(false)
 
-    const displayAddNewExercisePopup = () => {
+    const displayAddGoalPopup = () => {
         setPopup(true)
     }
 
-    const redirectToProgressiveOverloading = () => {
-        navigation.navigate('explore')
+    const redirectToGoalSetting = () => {
+        navigation.navigate('goals')
     }
 
     return (
         <>
             <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
-                <TouchableOpacity onPress={displayAddNewExercisePopup}>
+                <TouchableOpacity onPress={displayAddGoalPopup}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         Add Goal
                     </ThemedText>
                 </TouchableOpacity>
             </ThemedView>
             <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
-                <TouchableOpacity onPress={redirectToProgressiveOverloading}>
+                <TouchableOpacity onPress={redirectToGoalSetting}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         View All
                     </ThemedText>

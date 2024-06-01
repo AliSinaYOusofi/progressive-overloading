@@ -4,6 +4,8 @@ import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 import { MaterialIcons } from '@expo/vector-icons';
 import DeleteGoal from '../Modals/DeleteGoal';
+import UpdateGoalsPopup from '../Modals/UpdateGoalsPopup';
+import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 
 export type Goal = {
     id: number;
@@ -13,7 +15,8 @@ export type Goal = {
     remind_me: boolean;
     created: Date;
     updated: Date;
-    achevied: React.ReactNode;
+    achevied: number;
+    complete_in: string
 };
 
 type GoalCardProps = {
@@ -34,7 +37,9 @@ const GoalCard = ({ goal }: GoalCardProps) => {
                 
                 <View style={styles.detailContainer}>
                     <ThemedText style={styles.detail}>Description: {goal.description}</ThemedText>
-                    <ThemedText style={styles.detail}>Time to Complete: {goal.time_to_complete}</ThemedText>
+                    <ThemedText style={styles.detail}>I will complete in: {goal.complete_in}</ThemedText>
+                    <ThemedText style={styles.detail}>Remaining days: {distanceFromNowInDays(goal.time_to_complete)}</ThemedText>
+                    <ThemedText style={styles.detail}>Time to Complete: {goal.time_to_complete.split("T")[0]}</ThemedText>
                     <ThemedText style={styles.detail}>Remind Me: {goal.remind_me ? 'Yes' : 'No'}</ThemedText>
                 </View>
                 
@@ -44,7 +49,7 @@ const GoalCard = ({ goal }: GoalCardProps) => {
                 
                 <View style={styles.buttonContainer}>
                     
-                    <TouchableOpacity style={[styles.button, styles.editButton]}>
+                    <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.button, styles.editButton]}>
                         <MaterialIcons name="mode-edit-outline" size={24} color="white" />
                         <ThemedText style={styles.buttonText}>Edit</ThemedText>
                     </TouchableOpacity>
@@ -64,6 +69,13 @@ const GoalCard = ({ goal }: GoalCardProps) => {
                 <DeleteGoal toggleModal={setDeleteModal} id={goal.id}/>
             </Modal>
 
+            <Modal
+                animationType="fade"
+                visible={updateModal}
+                transparent={true}
+            >
+                <UpdateGoalsPopup toggleModal={setUpdateModal} goal={goal}/>
+            </Modal>
             
         </>
     );

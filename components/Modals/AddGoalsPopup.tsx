@@ -11,7 +11,7 @@ import { useAppContext } from '@/context/ContextProvider'
 import parseNaturalLanguageDate from '@/utils/parseNaturalLanguageDate'
 
 export type typeToggleModal = {
-    toggleModal: (toggle: boolean) => void
+    toggleModal: (toggle: boolean) => void;
 }
 
 export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
@@ -23,7 +23,7 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
     const [remindMe, setRemindMe] = useState<boolean>(false);
     const toggleSwitch = () => setRemindMe(previousState => !previousState);
     
-    const { setRefreshDatabaseFetch } = useAppContext()
+    const { setRefreshGoalsDatabase } = useAppContext()
 
     const addNewExercise = async () : Promise<void> => {
         
@@ -36,9 +36,9 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
             ToastAndroid.show("Please enter a time to complete", ToastAndroid.LONG)
             return
         }
-        let time_to_complete : Date
+        let time_to_complete : string
         try {
-            time_to_complete = parseNaturalLanguageDate(timeToComplete)
+            time_to_complete = parseNaturalLanguageDate(timeToComplete).toISOString()
         } catch (error) {
             console.error("unsupported date text provided", error)
             ToastAndroid.show("unsupported date text provided", ToastAndroid.LONG)
@@ -47,13 +47,16 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
 
         try {
             
-            let statement = await progressive_overloading.prepareAsync("INSERT INTO goals (goal_title, description, time_to_complete, remind_me, created, updated, acheived) VALUES (?, ?, ?, ?, ?, ?, ?)")
-            await statement.executeAsync([goalName, goalDescription, timeToComplete, time_to_complete, new Date().toISOString(), new Date().toISOString(), 0])
+            let statement = await progressive_overloading.prepareAsync("INSERT INTO goals (goal_title, description, complete_in, time_to_complete, remind_me, created, updated, acheived) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+            await statement.executeAsync([goalName, goalDescription, timeToComplete, time_to_complete, remindMe, new Date().toISOString(), new Date().toISOString(), 0])
             ToastAndroid.show("goal added", ToastAndroid.LONG)
-            toggleModal(false)
+            setRefreshGoalsDatabase(prev => ! prev)
+            
         } catch (error) {
             console.error("error adding new goal", error)
             ToastAndroid.show("error adding new goal", ToastAndroid.LONG)
+        } finally {
+            toggleModal(false)
         }
     }
 
@@ -63,10 +66,12 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
         const createGoalTable = async () : Promise<void> => {
             try {
 
+                // await progressive_overloading.execAsync("DROP TABLE IF EXISTS goals")
                 await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     goal_title TEXT,
                     description TEXT,
+                    complete_in TEXT,
                     time_to_complete TIMESTAMP,
                     remind_me INTEGER,
                     created TIMESTAMP,
