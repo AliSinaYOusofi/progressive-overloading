@@ -9,32 +9,30 @@ export type workoutProps = {
     numberOfSets: number,
     numberOfReps: number,
     weight: number,
-    weightType: string
+    weightType: string,
+    workout_index: number
 }
 
-export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSets = 2 , numberOfReps = 12, weight = 20, weightType= 'kg'}: workoutProps) {
+export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSets = 2 , numberOfReps = 12, weight = 20, weightType= 'kg', workout_index}: workoutProps) {
     const colorScheme = useColorScheme()
 
     return (
-        <ThemedView>
-
+        <ThemedView style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#333" : "#fff", shadowColor: colorScheme === "dark" ? "#fff" : "#000" }]}>
             <TouchableOpacity>
-
-                <ThemedView style={[styles.container, { borderBottomColor: colorScheme === "dark" ? "white" : "black"}]}>
-                    
+                <ThemedView style={styles.container}>
+                    <ThemedText style={styles.exercise_name}>
+                        {workout_index}
+                    </ThemedText>
                     <ThemedText style={styles.exercise_name}>
                         {exerciseName}
                     </ThemedText>
-                    
                     <ThemedView style={styles.exercise_details_container}>
                         <ThemedText style={styles.exercise_details}>
                             {numberOfSets} sets
                         </ThemedText>
-
                         <ThemedText>
                             {numberOfReps} reps
                         </ThemedText>
-
                         <ThemedText>
                             {weight} {weightType}
                         </ThemedText>
@@ -46,31 +44,32 @@ export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSet
 }
 
 const styles = StyleSheet.create({
+    card: {
+        marginVertical: 8,
+        borderRadius: 8,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5,
+    },
     container: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 8,
-        
-        borderBottomWidth: 1,
-        flexWrap: "wrap"
+        padding: 16,
+        flexWrap: "wrap",
     },
-
     exercise_name: {
         fontSize: 16,
         fontWeight: 'bold',
     },
-
     exercise_details: {
         fontSize: 16,
     },
-
     exercise_details_container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         columnGap: 10,
-        
     }
 })

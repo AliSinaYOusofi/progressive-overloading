@@ -18,7 +18,7 @@ export type Goal = {
     created: Date,
     updated: Date,
     achevied: number
-    
+    complete_in: string
 }
 
 export default function goals() {
@@ -51,7 +51,7 @@ export default function goals() {
                 {
                     goals.length
                     ?
-                    goals.map(item => <GoalCard goal={item}/>)
+                    goals.map(item => <GoalCard key={item.id} goal={item}/>)
                     :
                     <NoGoalsAdded />
                 }

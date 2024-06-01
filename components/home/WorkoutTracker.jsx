@@ -36,13 +36,14 @@ export default function WorkoutTracker() {
                 workouts.length
                 ?
 
-                workouts.map(workout => <WorkoutCards
+                workouts.map((workout, index) => <WorkoutCards
                     key={workout.id} 
                     exerciseName={workout.exercise_name}
                     numberOfReps={workout.reps}
                     numberOfSets={workout.sets}
                     weight={workout.weight}
                     weightType={workout.weight_type}
+                    workout_index={index}
                     />
                 )
                 :
