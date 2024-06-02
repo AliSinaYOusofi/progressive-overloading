@@ -28,10 +28,12 @@ const GoalCard = ({ goal }: GoalCardProps) => {
     const colorScheme = useColorScheme();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [updateModal, setUpdateModal] = useState<boolean>(false);
+    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
+    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
 
     return (
         <>
-            <View style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }]}>
+            <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
                 
                 <ThemedText style={styles.title}>{goal.goal_title}</ThemedText>
                 
@@ -90,11 +92,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         margin: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 5,
+        
     },
     title: {
         fontSize: 24,

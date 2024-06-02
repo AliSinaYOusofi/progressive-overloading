@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 
@@ -8,28 +8,23 @@ export type GoalProps = {
     description: string,
     timeToComplete: string,
     remindMe: boolean,
-    created: Date,
-    updated: Date,
-    achieved: number,
-    complete_in: string,
     goal_index: number
 }
 
-export default function MinimalGoalCard({ goalTitle, description, timeToComplete, remindMe, complete_in, goal_index }: GoalProps) {
+export default function MinimalGoalCard({ goalTitle, description, timeToComplete, remindMe, goal_index }: GoalProps) {
     const colorScheme = useColorScheme();
 
+    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
+    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8 }
+
     return (
-        <View style={[styles.container, { backgroundColor: colorScheme === "dark" ? "#333" : "#fff", shadowColor: colorScheme === "dark" ? "#fff" : "#000" }]}>
+        <View style={[styles.container, backgroundColorOfCards, borderOfCards]}>
             <TouchableOpacity>
-                
-                <ThemedText style={styles.goal_title}>{goal_index}. {goalTitle}</ThemedText>
-                <View style={styles.goal_details_container}>
-                    <ThemedText style={styles.goal_details}>{description}</ThemedText>
-                    <ThemedText style={styles.goal_details}> I will complete it in: {complete_in}</ThemedText>
-                    <ThemedText style={styles.goal_details}> Remaining days: {distanceFromNowInDays(timeToComplete)}</ThemedText>
-                    <ThemedText style={styles.goal_details}>Complete by: {timeToComplete.split("T")[0]}</ThemedText>
-                    <ThemedText style={styles.goal_details}>Remind Me: {remindMe ? 'Yes' : 'No'}</ThemedText>
-                </View>
+                <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
+                <ThemedText style={styles.description}>{description}</ThemedText>
+                <ThemedText style={styles.details}>Complete by: {timeToComplete.split("T")[0]}</ThemedText>
+                <ThemedText style={styles.details}>Remaining days: {distanceFromNowInDays(timeToComplete)}</ThemedText>
+                <ThemedText style={styles.remindMe}>Remind Me: {remindMe ? 'Yes' : 'No'}</ThemedText>
             </TouchableOpacity>
         </View>
     );
@@ -40,21 +35,23 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
     },
-    goal_title: {
+    goalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
+        marginBottom: 4,
+    },
+    description: {
+        fontSize: 16,
         marginBottom: 8,
     },
-    goal_details_container: {
-        flexDirection: 'column',
-    },
-    goal_details: {
+    details: {
         fontSize: 14,
         marginBottom: 4,
+    },
+    remindMe: {
+        fontSize: 14,
+        fontStyle: 'italic',
+        marginTop: 4,
     },
 });
