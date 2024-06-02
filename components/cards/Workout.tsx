@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { ThemedText } from '../ThemedText';
 import DeleteWorkout from '../Modals/DeleteWorkout';
 import UpdateWorkout from '../Modals/UpdateWorkout';
+import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 
 type Workout = {
     id: number;
@@ -29,10 +30,16 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
     const [updateModal, setUpdateModal] = useState<boolean>(false);
 
     const colorScheme = useColorScheme();
+    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
+    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
+    
+    const markAsAchevied = async () : Promise<void> => {
+        
+    }
 
     return (
         <>
-            <View style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }]}>
+            <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
                 <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
                 <ThemedText style={[styles.subtitle, { color: colorScheme === "dark" ? "#c0c0c0" : "#333" }]}>Current:</ThemedText>
                 <View style={styles.detailContainer}>
@@ -47,7 +54,9 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
                     <ThemedText style={styles.detail}>Reps : {workout.future_reps}</ThemedText>
                     <ThemedText style={styles.detail}>Weight : {workout.future_weight} {workout.weight_type}</ThemedText>
                 </View>
-                <ThemedText style={styles.date}>Date: {workout.created}</ThemedText>
+
+                <ThemedText style={styles.date}>Date: {workout.created.split("T")[0]} ({distanceFromNowInDays(workout.created)}) days ago</ThemedText>
+                
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.button, styles.editButton]}>
                         <MaterialIcons name="mode-edit-outline" size={24} color="white" />
@@ -58,6 +67,11 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
                         <ThemedText style={styles.buttonText}>Delete</ThemedText>
                     </TouchableOpacity>
                 </View>
+
+                <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.button, styles.mark_as_done_btn]}>
+                        <MaterialIcons name="check-circle-outline" size={24} color="white" />
+                        <ThemedText style={styles.mark_as_btn_text}>Mark as achevied</ThemedText>
+                </TouchableOpacity>
             </View>
 
             <Modal
@@ -86,11 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         margin: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 5,
+        
     },
     title: {
         fontSize: 24,
@@ -142,4 +152,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 5,
     },
+
+    mark_as_done_btn: {
+        backgroundColor: "#6200EA",
+    },
+
+    mark_as_btn_text: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 10
+    }
 });

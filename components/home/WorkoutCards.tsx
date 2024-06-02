@@ -13,13 +13,18 @@ export type workoutProps = {
     workout_index: number
 }
 
+
+
 export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSets = 2 , numberOfReps = 12, weight = 20, weightType= 'kg', workout_index}: workoutProps) {
+    
     const colorScheme = useColorScheme()
+    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
+    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1}
 
     return (
-        <ThemedView style={[styles.card, { backgroundColor: colorScheme === "dark" ? "#333" : "#fff", shadowColor: colorScheme === "dark" ? "#fff" : "#000" }]}>
+        <ThemedView style={[styles.card, borderOfCards, backgroundColorOfCards]}>
             <TouchableOpacity>
-                <ThemedView style={styles.container}>
+                <ThemedView style={[styles.container, styles.card]}>
                     <ThemedText style={styles.exercise_name}>
                         {workout_index}
                     </ThemedText>
@@ -47,10 +52,7 @@ const styles = StyleSheet.create({
     card: {
         marginVertical: 8,
         borderRadius: 8,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
+        
     },
     container: {
         flexDirection: 'row',

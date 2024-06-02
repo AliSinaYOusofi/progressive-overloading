@@ -12,6 +12,7 @@ import NoWorkoutsAdded from '../cards/NoWorkoutsAdded'
 export default function WorkoutTracker() {
 
     const [workouts, setWorkouts] = useState([])
+    
     const { refreshDatabaseFetch } = useAppContext()
 
     useEffect( () => {
