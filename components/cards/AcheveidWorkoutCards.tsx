@@ -6,7 +6,6 @@ import DeleteWorkout from '../Modals/DeleteWorkout';
 import UpdateWorkout from '../Modals/UpdateWorkout';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 import { progressive_overloading } from '@/db/sqlitedb';
-import UpdateGoalsPopup from '../Modals/UpdateGoalsPopup';
 import { useAppContext } from '@/context/ContextProvider';
 
 type Workout = {
@@ -21,96 +20,90 @@ type Workout = {
     future_sets: number;
     future_reps: number;
     future_weight: number;
+    achieved: number;
 };
 
-type WorkoutCardProps = {
+type AchievedWorkoutCardProps = {
     workout: Workout;
 };
 
-const WorkoutCard = ({ workout }: WorkoutCardProps) => {
+const AchievedWorkoutCard = ({ workout }: AchievedWorkoutCardProps) => {
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [updateModal, setUpdateModal] = useState<boolean>(false);
-    const {setRefreshDatabaseFetch} = useAppContext()
-    const colorScheme = useColorScheme();
-    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
     
-    const markAsAchevied = async () : Promise<void> => {
+    const { setRefreshDatabaseFetch } = useAppContext();
+    
+    const colorScheme = useColorScheme();
+    const backgroundColorOfCards = { backgroundColor: colorScheme === 'dark' ? '#1c1c1e' : '#fff' };
+    const borderOfCards = { borderColor: colorScheme === 'dark' ? 'white' : 'black', borderWidth: 1, borderRadius: 8 };
+
+    const markAsInProgress = async (): Promise<void> => {
         try {
-            let statement = await progressive_overloading.prepareAsync("UPDATE progressive_overloading SET acheived = 1 WHERE id = ?")
-            await statement.executeAsync(workout.id)
-            ToastAndroid.show("Workout marked as acheived", ToastAndroid.LONG);
-            setRefreshDatabaseFetch(prev => !prev)
+            let statement = await progressive_overloading.prepareAsync('UPDATE progressive_overloading SET acheived = 0 WHERE id = ?');
+            await statement.executeAsync(workout.id);
+            ToastAndroid.show('Workout marked as in progress', ToastAndroid.LONG);
+            setRefreshDatabaseFetch(prev => !prev);
         } catch (error) {
-            console.error("Error marking workout as acheived", error)
-            ToastAndroid.show("Error marking workout as acheived", ToastAndroid.LONG);
+            console.error('Error marking workout as in progress', error);
+            ToastAndroid.show('Error marking workout as in progress', ToastAndroid.LONG);
         }
-    }
+    };
 
     return (
         <>
             <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
                 <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
-                <ThemedText style={[styles.subtitle, { color: colorScheme === "dark" ? "#c0c0c0" : "#333" }]}>Current:</ThemedText>
+                <ThemedText style={[styles.subtitle, { color: colorScheme === 'dark' ? '#c0c0c0' : '#333' }]}>Current:</ThemedText>
                 <View style={styles.detailContainer}>
                     <ThemedText style={styles.detail}>Notes : {workout.exercise_description}</ThemedText>
                     <ThemedText style={styles.detail}>Sets : {workout.sets}</ThemedText>
                     <ThemedText style={styles.detail}>Reps : {workout.reps}</ThemedText>
                     <ThemedText style={styles.detail}>Weight : {workout.weight} {workout.weight_type}</ThemedText>
                 </View>
-                <ThemedText style={[styles.subtitle, { color: colorScheme === "dark" ? "#c0c0c0" : "#333" }]}>To:</ThemedText>
+                <ThemedText style={[styles.subtitle, { color: colorScheme === 'dark' ? '#c0c0c0' : '#333' }]}>To:</ThemedText>
                 <View style={styles.detailContainer}>
                     <ThemedText style={styles.detail}>Sets : {workout.future_sets}</ThemedText>
                     <ThemedText style={styles.detail}>Reps : {workout.future_reps}</ThemedText>
                     <ThemedText style={styles.detail}>Weight : {workout.future_weight} {workout.weight_type}</ThemedText>
                 </View>
 
-                <ThemedText style={styles.date}>Date: {workout.created.split("T")[0]} ({distanceFromNowInDays(workout.created)}) days ago</ThemedText>
-                
+                <ThemedText style={styles.date}>Date: {workout.created.split('T')[0]} ({distanceFromNowInDays(workout.created)}) days ago</ThemedText>
+
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => setUpdateModal(true)} style={[styles.button, styles.editButton]}>
-                        <MaterialIcons name="mode-edit-outline" size={24} color="white" />
+                        <MaterialIcons name='mode-edit-outline' size={24} color='white' />
                         <ThemedText style={styles.buttonText}>Edit</ThemedText>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setDeleteModal(true)} style={[styles.button, styles.deleteButton]}>
-                        <MaterialIcons name="delete-outline" size={24} color="white" />
+                        <MaterialIcons name='delete-outline' size={24} color='white' />
                         <ThemedText style={styles.buttonText}>Delete</ThemedText>
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={markAsAchevied} style={[styles.button, styles.mark_as_done_btn]}>
-                    <MaterialIcons name="check-circle-outline" size={24} color="white" />
-                    <ThemedText style={styles.mark_as_btn_text}>Mark as achevied</ThemedText>
+                <TouchableOpacity onPress={markAsInProgress} style={[styles.button, styles.markAsInProgressBtn]}>
+                    <MaterialIcons name='restore' size={24} color='white' />
+                    <ThemedText style={styles.markAsBtnText}>Mark as In Progress</ThemedText>
                 </TouchableOpacity>
             </View>
 
-            <Modal
-                animationType="fade"
-                visible={deleteModal}
-                transparent={true}
-            >
-                <DeleteWorkout toggleModal={setDeleteModal} id={workout.id}/>
+            <Modal animationType='fade' visible={deleteModal} transparent={true}>
+                <DeleteWorkout toggleModal={setDeleteModal} id={workout.id} />
             </Modal>
 
-            <Modal
-                animationType='fade'
-                transparent={true}
-                visible={updateModal}
-            >
-                <UpdateWorkout toggleModal={setUpdateModal} workout={workout}/>
+            <Modal animationType='fade' transparent={true} visible={updateModal}>
+                <UpdateWorkout toggleModal={setUpdateModal} workout={workout} />
             </Modal>
         </>
     );
 };
 
-export default WorkoutCard;
+export default AchievedWorkoutCard;
 
 const styles = StyleSheet.create({
     card: {
         borderRadius: 10,
         padding: 20,
         margin: 10,
-        
     },
     title: {
         fontSize: 24,
@@ -162,15 +155,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 5,
     },
-
-    mark_as_done_btn: {
-        backgroundColor: "#6200EA",
+    markAsInProgressBtn: {
+        backgroundColor: '#00796B',
     },
-
-    mark_as_btn_text: {
+    markAsBtnText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#fff',
-        marginLeft: 10
-    }
+        marginLeft: 10,
+    },
 });

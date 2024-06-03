@@ -20,7 +20,7 @@ export default function WorkoutTracker() {
         const fetchWorkout = async ()  => {
             try {
                 const result = await progressive_overloading.getAllAsync("SELECT * FROM progressive_overloading")
-                setWorkouts(result)
+                setWorkouts(result.reverse())
             } catch (error) {
                 console.error("error fetching progressive_overloading workouts", error)
                 ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT)

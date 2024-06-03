@@ -25,7 +25,7 @@ type GoalCardProps = {
     goal: Goal;
 };
 
-const GoalCard = ({ goal }: GoalCardProps) => {
+const AchievedGoalsCard = ({ goal }: GoalCardProps) => {
     
     const colorScheme = useColorScheme();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
@@ -33,17 +33,18 @@ const GoalCard = ({ goal }: GoalCardProps) => {
     const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
     const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
     const {setRefreshGoalsDatabase} = useAppContext()
-    const markGoalAsAcheived = async () : Promise<void> => {
+    
+    const markAsInProgress = async (): Promise<void> => {
         try {
-            let statement = await progressive_overloading.prepareAsync('UPDATE goals SET acheived = 1 WHERE id = ?');
+            let statement = await progressive_overloading.prepareAsync('UPDATE goals SET acheived = 0 WHERE id = ?');
             await statement.executeAsync(goal.id);
-            ToastAndroid.show('Goal marked as acheived', ToastAndroid.LONG);
+            ToastAndroid.show('Workout marked as in progress', ToastAndroid.LONG);
             setRefreshGoalsDatabase(prev => !prev);
         } catch (error) {
-            console.error('Error marking goal as acheived', error);
-            ToastAndroid.show('Error marking goal as acheived', ToastAndroid.LONG);
+            console.error('Error marking workout as in progress', error);
+            ToastAndroid.show('Error marking workout as in progress', ToastAndroid.LONG);
         }
-    }
+    };
 
     return (
         <>
@@ -75,9 +76,9 @@ const GoalCard = ({ goal }: GoalCardProps) => {
                         <ThemedText style={styles.buttonText}>Delete</ThemedText>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={markGoalAsAcheived} style={[styles.button, styles.mark_as_done_btn]}>
-                    <MaterialIcons name="check-circle-outline" size={24} color="white" />
-                    <ThemedText style={styles.mark_as_btn_text}>Mark as achevied</ThemedText>
+                <TouchableOpacity onPress={markAsInProgress} style={[styles.button, styles.markAsInProgressBtn]}>
+                    <MaterialIcons name='restore' size={24} color='white' />
+                    <ThemedText style={styles.markAsBtnText}>Mark as In Progress</ThemedText>
                 </TouchableOpacity>
             </View>
 
@@ -173,7 +174,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         marginLeft: 10
-    }
+    },
+
+    markAsBtnText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 10,
+    },
+    markAsInProgressBtn: {
+        backgroundColor: '#00796B',
+    },
 });
 
-export default GoalCard
+export default AchievedGoalsCard
