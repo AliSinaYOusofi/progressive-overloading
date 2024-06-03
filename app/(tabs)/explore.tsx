@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -8,6 +8,7 @@ import NoWorkoutsAdded from '@/components/cards/NoWorkoutsAdded';
 import AcheviedWorkouts from '@/components/home/AcheviedWorkouts';
 import { progressive_overloading } from '@/db/sqlitedb';
 import { useAppContext } from '@/context/ContextProvider';
+import { ThemedText } from '@/components/ThemedText';
 
 type Workout = {
   id: number;
@@ -29,12 +30,13 @@ export default function TabTwoScreen() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [view, setView] = useState<'progress' | 'achieved'>('progress');
   const { refreshDatabaseFetch } = useAppContext();
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     const fetchWorkout = async () => {
       try {
-        const result: Workout[] = await progressive_overloading.getAllAsync("SELECT * FROM progressive_overloading");
-        setWorkouts(result);
+        const result: Workout[] = await progressive_overloading.getAllAsync("SELECT * FROM progressive_overloading WHERE acheived = 0");
+        setWorkouts(result.reverse());
       } catch (error) {
         console.error("Error fetching progressive_overloading workouts", error);
         ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT);
@@ -51,29 +53,62 @@ export default function TabTwoScreen() {
     >
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, view === 'progress' && styles.selectedButton]}
+          style={[
+            styles.button,
+            view === 'progress' && {
+              backgroundColor: colorScheme === 'dark' ? 'white' : 'black',
+            },
+          ]}
           onPress={() => setView('progress')}
         >
-          <Text style={styles.buttonText}>Progress</Text>
+          <Text
+            style={[
+              styles.buttonText,
+              view === 'progress' && { color: colorScheme === 'dark' ? 'black' : 'white' },
+            ]}
+          >
+            In Progress
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, view === 'achieved' && styles.selectedButton]}
+          style={[
+            styles.button,
+            view === 'achieved' && {
+              backgroundColor: colorScheme === 'dark' ? 'white' : 'black',
+            },
+          ]}
           onPress={() => setView('achieved')}
         >
-          <Text style={styles.buttonText}>Achieved</Text>
+          <Text
+            style={[
+              styles.buttonText,
+              view === 'achieved' && { color: colorScheme === 'dark' ? 'black' : 'white' },
+            ]}
+          >
+            Achieved
+          </Text>
         </TouchableOpacity>
       </View>
       {view === 'progress' ? (
-        workouts.length > 0 ? (
-          workouts.map((workout, index) => <WorkoutCard key={index} workout={workout} />)
+          <>
+              <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
+                  In Progress ({workouts.length})
+              </ThemedText>
+              {workouts.length > 0 ? (
+                  workouts.map((workout, index) => <WorkoutCard key={index} workout={workout} />)
+              ) : (
+                  <NoWorkoutsAdded />
+              )}
+          </>
         ) : (
-          <NoWorkoutsAdded />
-        )
-      ) : (
+          <>
+        
         <AcheviedWorkouts />
-      )}
-    </ParallaxScrollView>
-  );
+            </>
+        )}
+
+          </ParallaxScrollView>
+        );
 }
 
 const styles = StyleSheet.create({
@@ -92,13 +127,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    backgroundColor: '#eee',
-  },
-  selectedButton: {
-    backgroundColor: '#aaa',
+    backgroundColor: 'gray',
   },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'black', // default text color for buttons
   },
 });

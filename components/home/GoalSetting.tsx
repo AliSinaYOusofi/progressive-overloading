@@ -29,7 +29,7 @@ export default function GoalSetting() {
         const fetchGoals = async () : Promise<void> => {
             try {
                 const result: Goal[] = await progressive_overloading.getAllAsync("SELECT * FROM goals")
-                setGoals(result)
+                setGoals(result.reverse())
             } catch (error) {
                 console.error("failed to fetch data ", error)
                 ToastAndroid.show("failed to fetch data ", ToastAndroid.LONG)

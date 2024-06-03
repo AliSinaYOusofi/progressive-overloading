@@ -8,7 +8,11 @@ export type GoalProps = {
     description: string,
     timeToComplete: string,
     remindMe: boolean,
-    goal_index: number
+    goal_index: number,
+    complete_in: string,
+    created: Date,
+    updated: Date,
+    achieved: number
 }
 
 export default function MinimalGoalCard({ goalTitle, description, timeToComplete, remindMe, goal_index }: GoalProps) {
@@ -18,7 +22,7 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
     const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8 }
 
     return (
-        <View style={[styles.container, backgroundColorOfCards, borderOfCards]}>
+        <View style={[styles.container, borderOfCards]}>
             <TouchableOpacity>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
                 <ThemedText style={styles.description}>{description}</ThemedText>

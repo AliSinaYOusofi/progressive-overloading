@@ -75,10 +75,6 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
             return
         }
 
-        // insert data 
-
-        console.log(exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType)
-        // current date and time
         const currentDate = new Date().toISOString();
         let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, future_sets, future_reps, future_weight, created, updated, acheived) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         const result = await statement.executeAsync([exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType, futureNumberOfReps, futureNumberOfSets, futureWeight, currentDate, currentDate, 0])
@@ -89,11 +85,8 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
     useEffect( () => {
         const createTable = async () : Promise<void> => {
-            
-            // create table in database
 
             try {
-                // await progressive_overloading.execAsync("DROP TABLE IF EXISTS progressive_overloading")
                 await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     exercise_name TEXT,
