@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import React, { useEffect } from 'react'
-import { View, Text, StyleSheet, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, ToastAndroid, FlatList } from 'react-native'
 import { ThemedText } from '../ThemedText'
 import { ThemedView } from '../ThemedView'
 import WorkoutCards from './WorkoutCards'
@@ -32,21 +32,20 @@ export default function WorkoutTracker() {
 
     return (
         <ThemedView style={styles.container}>
-            <ThemedText style={styles.workout_text}> 1. Progressie Overloading </ThemedText>
+            <ThemedText style={styles.workout_text}> 1. Progressive Overloading </ThemedText>
+
             {
+                
                 workouts.length
                 ?
-
-                workouts.map((workout, index) => <WorkoutCards
-                    key={workout.id} 
-                    exerciseName={workout.exercise_name}
-                    numberOfReps={workout.reps}
-                    numberOfSets={workout.sets}
-                    weight={workout.weight}
-                    weightType={workout.weight_type}
-                    workout_index={index}
-                    />
-                )
+                <FlatList
+                    data={workouts}
+                    keyExtractor={item => item.id}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({item, index}) => <WorkoutCards exerciseName={item.exercise_name} numberOfReps={item.reps} numberOfSets={item.sets} weight={item.weight} weightType={item.weight_type} workout_index={index} />}
+                />
+                
                 :
                 <NoWorkoutsAdded />
             }

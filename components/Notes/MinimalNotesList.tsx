@@ -8,6 +8,8 @@ import AddGoalsButton from '../home/AddGoalsButton'
 import { progressive_overloading } from '@/db/sqlitedb'
 import MinimalGoalCard from '../cards/MinimalGoalCard'
 import { useAppContext } from '@/context/ContextProvider'
+import NoNotesAddedCard from '../cards/NoNotesAddedCard'
+import AddNotesButton from './AddNotesButton'
 
 export type Goal = {
     id: number,
@@ -20,40 +22,40 @@ export type Goal = {
     achevied: number
     complete_in: string
 }
-export default function GoalSetting() {
+export default function MinimalNotesList() {
     
-    const [goals, setGoals] = useState<Goal[]>([])
+    const [notes, setNotes] = useState<Goal[]>([])
     const { refreshGoalsDatabase } = useAppContext()
 
     useEffect( () => {
-        const fetchGoals = async () : Promise<void> => {
+        const fetchNotes = async () : Promise<void> => {
             try {
-                const result: Goal[] = await progressive_overloading.getAllAsync("SELECT * FROM goals")
-                setGoals(result.reverse())
+                const result: Goal[] = await progressive_overloading.getAllAsync("SELECT * FROM ntoes")
+                setNotes(result.reverse())
             } catch (error) {
                 console.error("failed to fetch data ", error)
                 ToastAndroid.show("failed to fetch data ", ToastAndroid.LONG)
             }
         }
-        fetchGoals()
+        // fetchNotes()
     }, [refreshGoalsDatabase])
     
     return (
         <ThemedView style={styles.container}>
-            <ThemedText style={styles.goal_text}> 2. Goals </ThemedText>
+            <ThemedText style={styles.goal_text}> 3. Notes </ThemedText>
             {
-                goals.length
+                notes.length
                 ?
                 <FlatList
-                    data={goals}
+                    data={notes}
                     horizontal
                     keyExtractor={item => item.id.toString()}
                     renderItem={({item, index}) => <MinimalGoalCard goal_index={index}  complete_in={item.complete_in} key={item.id} goalTitle={item.goal_title} description={item.description} timeToComplete={item.time_to_complete} created={item.created} updated={item.updated} achieved={item.achevied} remindMe={item.remind_me}/>}
                 />
                 :
-                <NoGoalsAdded />
+                <NoNotesAddedCard />
             }
-            <AddGoalsButton />
+            <AddNotesButton />
         </ThemedView>
     )
 }
