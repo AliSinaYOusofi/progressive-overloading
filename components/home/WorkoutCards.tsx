@@ -22,7 +22,7 @@ export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSet
     const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1}
 
     return (
-        <ThemedView style={[styles.card, borderOfCards, ]}>
+        <ThemedView style={[styles.card, borderOfCards, {marginLeft: 5}]}>
             <TouchableOpacity>
                 <ThemedView style={[styles.container, styles.card]}>
                     <ThemedText style={styles.exercise_name}>
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     card: {
         marginVertical: 8,
         borderRadius: 8,
+
         
     },
     container: {
@@ -60,6 +61,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 16,
         flexWrap: "wrap",
+        width: "auto",
+        gap: 10
     },
     exercise_name: {
         fontSize: 16,

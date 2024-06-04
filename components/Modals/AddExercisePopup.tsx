@@ -278,6 +278,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 10,
         borderRadius: 4,
+        position: "relative"
     },
 
     exercise_details: {

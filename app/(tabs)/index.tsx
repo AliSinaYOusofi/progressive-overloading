@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { getRandomImage } from '@/utils/randomImageIndexGenerator';
 import GoalSetting from '@/components/home/GoalSetting';
+import MinimalNotesList from '@/components/Notes/MinimalNotesList';
 
 export default function HomeScreen() {
   const [image, setImage] = useState({src: "", name: ""});
@@ -22,6 +23,7 @@ export default function HomeScreen() {
       headerImage={headerImage}>
       <WorkoutTracker />
       <GoalSetting />
+      <MinimalNotesList />
     </ParallaxScrollView>
   );
 }

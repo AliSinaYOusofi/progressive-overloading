@@ -22,8 +22,8 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
     const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8 }
 
     return (
-        <View style={[styles.container, borderOfCards]}>
-            <TouchableOpacity>
+        <View style={[styles.container, borderOfCards, { marginLeft: 10}]}>
+            <TouchableOpacity style={{width: "100%", marginRight: 20, marginLeft: 10}}>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
                 <ThemedText style={styles.description}>{description}</ThemedText>
                 <ThemedText style={styles.details}>Complete by: {timeToComplete.split("T")[0]}</ThemedText>
@@ -39,11 +39,14 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
+        width: "auto",
+        
     },
     goalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 4,
+        
     },
     description: {
         fontSize: 16,
