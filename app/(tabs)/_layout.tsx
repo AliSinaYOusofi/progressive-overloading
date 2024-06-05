@@ -51,6 +51,15 @@ export default function TabLayout(props: TabLayoutProps) {
           ),
         }}
       />
+      <Tabs.Screen
+        name="notes"
+        options={{
+          title: 'notes',
+          tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+            <TabBarIcon name={focused ? 'trail-sign' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

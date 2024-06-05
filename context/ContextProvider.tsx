@@ -5,7 +5,9 @@ interface ContextType  {
     refreshDatabaseFetch: boolean,
     setRefreshDatabaseFetch: React.Dispatch<React.SetStateAction<boolean>>,
     refreshGoalsDatabase: boolean,
-    setRefreshGoalsDatabase: React.Dispatch<React.SetStateAction<boolean>>
+    setRefreshGoalsDatabase: React.Dispatch<React.SetStateAction<boolean>>,
+    refreshNOtesTable: boolean,
+    setRefresNotesTable: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Context = createContext<ContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ export const ContextProvider = ({children} : ContextProviderProps ) => {
     
     const [ refreshDatabaseFetch, setRefreshDatabaseFetch] = useState<boolean>(false);
     const [ refreshGoalsDatabase, setRefreshGoalsDatabase] = useState<boolean>(false);
+    const [ refreshNOtesTable, setRefresNotesTable] = useState<boolean>(false)
 
     return (
     
@@ -25,7 +28,9 @@ export const ContextProvider = ({children} : ContextProviderProps ) => {
                 refreshDatabaseFetch,
                 setRefreshDatabaseFetch,
                 refreshGoalsDatabase,
-                setRefreshGoalsDatabase
+                setRefreshGoalsDatabase,
+                refreshNOtesTable,
+                setRefresNotesTable
             }}
         >
         {
