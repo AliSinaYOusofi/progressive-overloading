@@ -18,38 +18,20 @@ export type notes = {
     updated: Date
 }
 
-export default function AddNotesPopup({toggleModal} : toggle) {
+export type notesProps = {
+    toggleModal: (toggle: boolean) => void;
+    notes: notes
+}
 
-    const [ notesTitle, setNoteTitle] = useState<string>("")
-    const [ notesContent, setNoteContent] = useState<string>("")
+export default function EditNotesPopup({toggleModal, notes} : notesProps) {
+
+    const [ notesTitle, setNoteTitle] = useState<string>(notes.title)
+    const [ notesContent, setNoteContent] = useState<string>(notes.content)
 
     const colorScheme = useColorScheme()
     const { setRefresNotesTable } = useAppContext()
 
-    useEffect( () => {
-        // create goal table
-
-        const createNotesTable = async () : Promise<void> => {
-            try {
-
-                
-                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS notes (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    title TEXT,
-                    content TEXT,
-                    created TIMESTAMP,
-                    updated TIMESTAMP
-                )`)
-                console.log("notes table created")
-            } catch (error) {
-                console.error("error creating goals table", error)
-                ToastAndroid.show("error creating notes table", ToastAndroid.LONG)
-            }
-        }
-        createNotesTable()
-    }, [])
-
-    const addNewExercise = async () : Promise<void> => {
+    const updateNotes = async () : Promise<void> => {
         
         if (notesTitle === "") {
             ToastAndroid.show("Please enter a note title", ToastAndroid.LONG)
@@ -62,15 +44,19 @@ export default function AddNotesPopup({toggleModal} : toggle) {
         }
 
         try {
-
-            let statement = await progressive_overloading.prepareAsync("INSERT INTO notes (title, content, created, updated) VALUES (?, ?, ?, ?)")
-            await statement.executeAsync([notesTitle, notesContent, new Date().toISOString(), new Date().toISOString()])
-            ToastAndroid.show("note added", ToastAndroid.LONG)
+            
+            let statement = await progressive_overloading.prepareAsync("UPDATE notes SET title = ?, content = ?, updated = ? WHERE id = ?")
+            await statement.executeAsync([notesTitle, notesContent, new Date().toISOString(), notes.id])
+            ToastAndroid.show("note updated", ToastAndroid.LONG)
             setRefresNotesTable(prev => ! prev)
-        } catch (error) {
+        } 
+        
+        catch (error) {
             console.error("error adding new goal", error)
             ToastAndroid.show("error adding new goal", ToastAndroid.LONG)
-        } finally {
+        } 
+        
+        finally {
             toggleModal(false)
         }
     }
@@ -107,7 +93,7 @@ export default function AddNotesPopup({toggleModal} : toggle) {
                 
 
                 <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
-                    <TouchableOpacity onPress={addNewExercise}>
+                    <TouchableOpacity onPress={updateNotes}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Add Goal
                         </ThemedText>
