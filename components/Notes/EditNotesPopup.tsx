@@ -92,7 +92,7 @@ export default function EditNotesPopup({toggleModal, notes} : notesProps) {
 
                 
 
-                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
+                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50,}]}>
                     <TouchableOpacity onPress={updateNotes}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Add Goal

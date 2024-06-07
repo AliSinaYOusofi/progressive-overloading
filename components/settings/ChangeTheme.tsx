@@ -68,7 +68,7 @@ export default function ChangeTheme() {
                             />
                         </View>
                     </View>
-
+                    
                     <View style={styles.start_and_far_end}>
                         <View>
                             <View style={styles.icon_and_text}>
@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
 
     automatic_description: {
         fontSize: 13,
-        lineHeight: 22,
+        lineHeight: 20,
         textAlign: 'justify',
-        color: "#ddd",
+        color: "gray",
         marginTop: 10
     }
 })

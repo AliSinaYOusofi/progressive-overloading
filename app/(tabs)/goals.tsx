@@ -48,6 +48,9 @@ export default function Goals() {
             headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
             headerImage={<Feather size={310} name="target" style={styles.headerImage} />}
         >
+            <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
+                2. Goal Setting
+            </ThemedText>
             <ThemedView style={styles.container}>
                 
                 <View style={styles.buttonContainer}>
@@ -65,6 +68,7 @@ export default function Goals() {
                             style={[
                                 styles.buttonText,
                                 view === 'inProgress' && { color: colorScheme === 'dark' ? 'black' : 'white' },
+                                
                             ]}
                         >
                             In Progress
@@ -91,7 +95,7 @@ export default function Goals() {
                 </View>
                 {view === 'inProgress' ? (
                     <>
-                        <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
+                        <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
                             In Progress ({goals.length})
                         </ThemedText>
                         {goals.length > 0 ? (
@@ -149,6 +153,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black', // default text color for buttons
+        textAlign: "center",
+        
     },
     goalCount: {
         fontSize: 20,

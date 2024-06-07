@@ -22,14 +22,14 @@ export default function AddExerciseButton() {
 
     return (
         <>
-            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
+            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                 <TouchableOpacity onPress={displayAddNewExercisePopup}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         Add Exercise
                     </ThemedText>
                 </TouchableOpacity>
             </ThemedView>
-            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
+            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                 <TouchableOpacity onPress={redirectToProgressiveOverloading}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         View All

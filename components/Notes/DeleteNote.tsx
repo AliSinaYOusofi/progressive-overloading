@@ -34,8 +34,8 @@ export default function DeleteNote({id, toggleModal} : Props) {
         <View style={styles.modalContainer}>
             <View style={[styles.popup_container, { backgroundColor: colorScheme === 'dark' ? '#333' : '#fff' }]}>
 
-                <ThemedText style={{fontWeight: "bold"}}> Are sure you want to delete this goal? </ThemedText>
-                <ThemedText> This action cannot be undone</ThemedText>
+                <ThemedText style={{fontWeight: "bold"}}> Are sure you want to delete this note? </ThemedText>
+                <ThemedText> This action cannot be undone.</ThemedText>
 
                 <View style={styles.button_views}>
                     <TouchableOpacity onPress={deleteNote} style={[styles.delete_button, styles.both_button]}>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     
     both_button: {
-        borderRadius: 10,
+        borderRadius: 50,
         paddingHorizontal: 24,
         paddingVertical: 10
     }

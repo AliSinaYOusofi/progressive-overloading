@@ -126,7 +126,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                 <View style={[styles.inputs, { marginTop: 50}]}>
                     
                     <TextInput
-                        placeholder='exercise name'
+                        placeholder='exercise name '
                         value={exerciseName}
                         onChangeText={text => setExerciseName(text)}
                         style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2'}]}
@@ -224,7 +224,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                     </View>
                 </View>
             
-                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
+                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50,}]}>
                     <TouchableOpacity onPress={addNewExercise}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Add Exercise

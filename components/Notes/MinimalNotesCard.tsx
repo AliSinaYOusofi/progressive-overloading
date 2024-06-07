@@ -3,22 +3,20 @@ import { ThemedText } from '../ThemedText'
 import { notes } from './AddNotesPopup'
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import distanceFromNowInDays from '@/utils/returnDistanceInDays'
+import { ThemedView } from '../ThemedView'
 
 export default function MinimalNotesCard({id, title, content: body, created, updated} : notes) {
     const colorScheme = useColorScheme()
 
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1 }
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
     
     return (
-        <View style={[styles.container, borderOfCards, { marginLeft: 10}]}>
+        <ThemedView style={[styles.container, borderOfCards, { marginLeft: 10}]}>
             <TouchableOpacity style={{width: "auto", marginRight: 20, marginLeft: 10}}>
                 <ThemedText style={styles.goalTitle}>{title}</ThemedText>
                 <ThemedText style={styles.description}>{body}</ThemedText>
-                
-                <ThemedText style={styles.details}>Remaining days: </ThemedText>
-                
             </TouchableOpacity>
-        </View>
+        </ThemedView>
     )
 }
 
@@ -28,7 +26,8 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         borderRadius: 10,
         width: "auto",
-       
+        minHeight: 100,
+        maxHeight: "auto"
     },
     goalTitle: {
         fontSize: 18,
