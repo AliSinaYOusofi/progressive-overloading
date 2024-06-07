@@ -140,7 +140,7 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
                     
                 </View>
 
-                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
+                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                     <TouchableOpacity onPress={addNewExercise}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Add Goal

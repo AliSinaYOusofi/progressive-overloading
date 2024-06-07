@@ -5,7 +5,7 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { View } from 'react-native';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 interface TabLayoutProps {
   // Define any props for TabLayout here
@@ -20,7 +20,7 @@ export default function TabLayout(props: TabLayoutProps) {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarStyle: styles.tabBar,
-        tabBarLabelPosition: "beside-icon",
+        tabBarLabelPosition: "below-icon",
         tabBarShowLabel: false,
         
       }}
@@ -40,7 +40,8 @@ export default function TabLayout(props: TabLayoutProps) {
         options={{
           title: '',
           tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Ionicons name={focused ? "football" : "football-outline"} size={24} color={color} />
+            <MaterialIcons name="fitness-center" size={24} color={color} />
+            
           ),
         }}
       />
@@ -49,7 +50,7 @@ export default function TabLayout(props: TabLayoutProps) {
         options={{
           title: '',
           tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Ionicons name={focused ? "footsteps" : "footsteps-outline"} size={24} color={color} />
+            <Ionicons name={focused ? "football" : "football-outline"} size={24} color={color} />
           ),
         }}
       />

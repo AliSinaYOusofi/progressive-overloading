@@ -51,6 +51,9 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<FontAwesome6 size={310} name="dumbbell" style={styles.headerImage} />}
     >
+      <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
+        1. Progressive overloading
+      </ThemedText>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -91,7 +94,7 @@ export default function TabTwoScreen() {
       </View>
       {view === 'progress' ? (
           <>
-              <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
+              <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
                   In Progress ({workouts.length})
               </ThemedText>
               {workouts.length > 0 ? (

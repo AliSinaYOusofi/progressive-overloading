@@ -19,7 +19,7 @@ export default function WorkoutCards({exerciseName = 'Bench Press' , numberOfSet
     
     const colorScheme = useColorScheme()
     const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1}
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     return (
         <ThemedView style={[styles.card, borderOfCards, {marginLeft: 5}]}>

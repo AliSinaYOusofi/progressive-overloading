@@ -30,8 +30,7 @@ const AchievedGoalsCard = ({ goal }: GoalCardProps) => {
     const colorScheme = useColorScheme();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [updateModal, setUpdateModal] = useState<boolean>(false);
-    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
     const {setRefreshGoalsDatabase} = useAppContext()
     
     const markAsInProgress = async (): Promise<void> => {
@@ -48,7 +47,7 @@ const AchievedGoalsCard = ({ goal }: GoalCardProps) => {
 
     return (
         <>
-            <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
+            <ThemedView style={[styles.card, borderOfCards]}>
                 
                 <ThemedText style={styles.title}>{goal.goal_title}</ThemedText>
                 
@@ -80,7 +79,7 @@ const AchievedGoalsCard = ({ goal }: GoalCardProps) => {
                     <MaterialIcons name='restore' size={24} color='white' />
                     <ThemedText style={styles.markAsBtnText}>Mark as In Progress</ThemedText>
                 </TouchableOpacity>
-            </View>
+            </ThemedView>
 
             <Modal
                 animationType="fade"
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 50,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',

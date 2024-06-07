@@ -1,6 +1,5 @@
 import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
-import { Feather } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, ToastAndroid } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
@@ -32,7 +31,7 @@ export default function Notes() {
     return (
         <ParallaxScrollView headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
         headerImage={<FontAwesome name="sticky-note" size={410} style={styles.headerImage} />} >
-            <ThemedText style={styles.goal_text}> Sticky Notes ({Note.length})</ThemedText>
+            <ThemedText style={styles.goal_text}> 3. Sticky Notes ({Note.length})</ThemedText>
             {
                 Note.length
                 ?

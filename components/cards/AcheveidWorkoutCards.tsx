@@ -7,6 +7,7 @@ import UpdateWorkout from '../Modals/UpdateWorkout';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 import { progressive_overloading } from '@/db/sqlitedb';
 import { useAppContext } from '@/context/ContextProvider';
+import { ThemedView } from '../ThemedView';
 
 type Workout = {
     id: number;
@@ -35,7 +36,7 @@ const AchievedWorkoutCard = ({ workout }: AchievedWorkoutCardProps) => {
     
     const colorScheme = useColorScheme();
     const backgroundColorOfCards = { backgroundColor: colorScheme === 'dark' ? '#1c1c1e' : '#fff' };
-    const borderOfCards = { borderColor: colorScheme === 'dark' ? 'white' : 'black', borderWidth: 1, borderRadius: 8 };
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     const markAsInProgress = async (): Promise<void> => {
         try {
@@ -51,7 +52,7 @@ const AchievedWorkoutCard = ({ workout }: AchievedWorkoutCardProps) => {
 
     return (
         <>
-            <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
+            <ThemedView style={[styles.card, borderOfCards]}>
                 <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
                 <ThemedText style={[styles.subtitle, { color: colorScheme === 'dark' ? '#c0c0c0' : '#333' }]}>Current:</ThemedText>
                 <View style={styles.detailContainer}>
@@ -84,7 +85,7 @@ const AchievedWorkoutCard = ({ workout }: AchievedWorkoutCardProps) => {
                     <MaterialIcons name='restore' size={24} color='white' />
                     <ThemedText style={styles.markAsBtnText}>Mark as In Progress</ThemedText>
                 </TouchableOpacity>
-            </View>
+            </ThemedView>
 
             <Modal animationType='fade' visible={deleteModal} transparent={true}>
                 <DeleteWorkout toggleModal={setDeleteModal} id={workout.id} />
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 50,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',

@@ -24,14 +24,14 @@ export default function AddGoalsButton() {
 
     return (
         <>
-            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
+            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                 <TouchableOpacity onPress={displayAddGoalPopup}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         Add Goal
                     </ThemedText>
                 </TouchableOpacity>
             </ThemedView>
-            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black'}]}>
+            <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                 <TouchableOpacity onPress={redirectToGoalSetting}>
                     <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                         View All

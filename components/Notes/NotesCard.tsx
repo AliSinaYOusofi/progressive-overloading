@@ -3,11 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, Modal, ToastA
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 import { MaterialIcons } from '@expo/vector-icons';
-import DeleteGoal from '../Modals/DeleteGoal';
-import UpdateGoalsPopup from '../Modals/UpdateGoalsPopup';
-import distanceFromNowInDays from '@/utils/returnDistanceInDays';
-import { progressive_overloading } from '@/db/sqlitedb';
-import { useAppContext } from '@/context/ContextProvider';
 import { notes } from './AddNotesPopup';
 import DeleteNote from './DeleteNote';
 import EditNotesPopup from './EditNotesPopup';
@@ -18,18 +13,16 @@ const NotesCard = (notes: notes) => {
     const colorScheme = useColorScheme();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [updateModal, setUpdateModal] = useState<boolean>(false);
-    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8}
-    const { setRefresNotesTable } = useAppContext()
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     return (
         <>
-            <View style={[styles.card, backgroundColorOfCards, borderOfCards]}>
+            <ThemedView style={[styles.card, borderOfCards]}>
                 
                 <ThemedText style={styles.title}>{notes.title}</ThemedText>
                 
                 <View style={styles.detailContainer}>
-                    <ThemedText style={styles.detail}>Description: {notes.content}</ThemedText>
+                    <ThemedText style={styles.detail}>{notes.content}</ThemedText>
                 </View>
                 
                 <ThemedText style={styles.date}>Created: {new Date(notes.created).toDateString()}</ThemedText>
@@ -48,7 +41,7 @@ const NotesCard = (notes: notes) => {
                         <ThemedText style={styles.buttonText}>Delete</ThemedText>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ThemedView>
 
             <Modal
                 animationType="fade"
@@ -107,7 +100,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 50,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',

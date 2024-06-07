@@ -1,7 +1,6 @@
 import { Image, StyleSheet, Platform } from 'react-native';
 import WorkoutTracker from '../../components/home/WorkoutTracker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { getRandomImage } from '@/utils/randomImageIndexGenerator';
 import GoalSetting from '@/components/home/GoalSetting';

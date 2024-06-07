@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
+import { ThemedView } from '../ThemedView';
 
 export type GoalProps = {
     goalTitle: string,
@@ -19,10 +20,10 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
     const colorScheme = useColorScheme();
 
     const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
-    const borderOfCards = { borderColor: colorScheme === "dark" ? "white" : "black", borderWidth: 1, borderRadius: 8 }
+    const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     return (
-        <View style={[styles.container, borderOfCards, { marginLeft: 10}]}>
+        <ThemedView style={[styles.container, borderOfCards, { marginLeft: 10}]}>
             <TouchableOpacity style={{width: "100%", marginRight: 20, marginLeft: 10}}>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
                 <ThemedText style={styles.description}>{description}</ThemedText>
@@ -30,7 +31,7 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
                 <ThemedText style={styles.details}>Remaining days: {distanceFromNowInDays(timeToComplete)}</ThemedText>
                 <ThemedText style={styles.remindMe}>Remind Me: {remindMe ? 'Yes' : 'No'}</ThemedText>
             </TouchableOpacity>
-        </View>
+        </ThemedView>
     );
 }
 
@@ -39,8 +40,8 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
-        width: "auto",
-        
+       
+        minWidth: "90%"
     },
     goalTitle: {
         fontSize: 18,

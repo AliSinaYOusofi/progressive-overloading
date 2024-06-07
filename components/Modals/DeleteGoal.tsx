@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     },
     
     both_button: {
-        borderRadius: 10,
+        borderRadius: 50,
         paddingHorizontal: 24,
         paddingVertical: 10
     }

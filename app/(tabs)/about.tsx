@@ -13,7 +13,7 @@ export default function AboutPage() {
 
     return (
         <ScrollView  style={styles.scrollView}>
-            <ThemedText style={styles.title}>About Our App</ThemedText>
+            <ThemedText style={styles.title}>About My App</ThemedText>
             <ThemedView style={styles.container}>
                 
                 <ThemedView style={styles.section}>
@@ -59,7 +59,6 @@ export default function AboutPage() {
 const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
-        width: "90%",
         marginHorizontal: "auto"
     },
     container: {
@@ -72,8 +71,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginTop: 50
-        
+        marginTop: 50,
+        textAlign: "center"
     },
     section: {
         marginBottom: 20
