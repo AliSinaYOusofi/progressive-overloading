@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, useColorScheme, TouchableOpacity, Dimensions } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
-import { ThemedView } from '../ThemedView';
 
 export type GoalProps = {
     goalTitle: string,
@@ -17,21 +16,18 @@ export type GoalProps = {
 }
 
 export default function MinimalGoalCard({ goalTitle, description, timeToComplete, remindMe, goal_index }: GoalProps) {
-    const colorScheme = useColorScheme();
-
-    const backgroundColorOfCards = { backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#fff" }
     const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     return (
-        <ThemedView style={[styles.container, borderOfCards, { marginLeft: 10}]}>
-            <TouchableOpacity style={{width: "100%", marginRight: 20, marginLeft: 10}}>
+            <TouchableOpacity style={[styles.container, borderOfCards]}>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
-                <ThemedText style={styles.description}>{description}</ThemedText>
-                <ThemedText style={styles.details}>Complete by: {timeToComplete.split("T")[0]}</ThemedText>
-                <ThemedText style={styles.details}>Remaining days: {distanceFromNowInDays(timeToComplete)}</ThemedText>
-                <ThemedText style={styles.remindMe}>Remind Me: {remindMe ? 'Yes' : 'No'}</ThemedText>
+                <ThemedText numberOfLines={2} style={styles.description}>{description}</ThemedText>
+                
+                <View style={styles.date_view}>
+                    <ThemedText style={styles.details}>Complete by: {timeToComplete.split("T")[0]}</ThemedText>
+                    <ThemedText style={styles.details}>Remaining : {distanceFromNowInDays(timeToComplete)} day(s)</ThemedText>
+                </View>
             </TouchableOpacity>
-        </ThemedView>
     );
 }
 
@@ -40,8 +36,13 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
-       
-        minWidth: "90%"
+        minWidth: Dimensions.get('window').width - 100,
+        maxWidth: Dimensions.get('window').width - 100,
+        minHeight: Dimensions.get('window').height - 600,
+        maxHeight: Dimensions.get('window').height - 600,
+        marginRight: 4,
+        overflow: "scroll",
+        position: "relative"
     },
     goalTitle: {
         fontSize: 18,
@@ -62,4 +63,10 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         marginTop: 4,
     },
+
+    date_view:{
+        position: "absolute",
+        bottom: 0,
+        left: 16,
+    }
 });
