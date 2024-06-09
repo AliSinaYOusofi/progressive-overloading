@@ -18,7 +18,6 @@ type goalProps = {
     goal_title: string;
     description: string;
     time_to_complete: string;
-    remind_me: boolean;
     created: Date;
     updated: Date;
     achevied: number;
@@ -36,8 +35,7 @@ export default function UpdateGoalsPopup({ toggleModal, goal }: UpdateGoalsProps
     const [goalName, setGoalName] = useState<string>(goal.goal_title)
     const [goalDescription, setGoalDescription] = useState<string>(goal.description)
     const [timeToComplete, setTimeToComplete] = useState<any>(goal.complete_in)
-    const [remindMe, setRemindMe] = useState<boolean>(Boolean(goal.remind_me))
-    const toggleSwitch = () => setRemindMe(previousState => !previousState)
+    
 
     const { setRefreshGoalsDatabase } = useAppContext()
 
@@ -62,8 +60,8 @@ export default function UpdateGoalsPopup({ toggleModal, goal }: UpdateGoalsProps
         }
 
         try {
-            let statement = await progressive_overloading.prepareAsync("UPDATE goals SET goal_title = ?, description = ?, time_to_complete = ?, remind_me = ?, updated = ? WHERE id = ?")
-            await statement.executeAsync([goalName, goalDescription, time_to_complete, remindMe, new Date().toISOString(), goal.id])
+            let statement = await progressive_overloading.prepareAsync("UPDATE goals SET goal_title = ?, description = ?, time_to_complete = ?, updated = ? WHERE id = ?")
+            await statement.executeAsync([goalName, goalDescription, time_to_complete, new Date().toISOString(), goal.id])
             ToastAndroid.show("Goal updated", ToastAndroid.LONG)
             setRefreshGoalsDatabase(prev => ! prev)
             
@@ -114,7 +112,7 @@ export default function UpdateGoalsPopup({ toggleModal, goal }: UpdateGoalsProps
                     />
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: "flex-start", alignItems: "center" }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: "flex-start", alignItems: "center" }}>
 
                     <ThemedText style={{ alignSelf: "center", fontWeight: "bold" }}> Remind me: </ThemedText>
                     <Switch
@@ -126,7 +124,7 @@ export default function UpdateGoalsPopup({ toggleModal, goal }: UpdateGoalsProps
                         style={{ marginTop: 3 }}
                     />
 
-                </View>
+                </View> */}
 
                 <ThemedView style={[styles.button_container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4 }]}>
                     <TouchableOpacity onPress={updateGoal}>

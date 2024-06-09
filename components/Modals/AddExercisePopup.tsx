@@ -13,6 +13,9 @@ export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
 }
 
+
+
+
 export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
     const colorScheme = useColorScheme()

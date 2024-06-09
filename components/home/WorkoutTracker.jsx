@@ -43,7 +43,21 @@ export default function WorkoutTracker() {
                     keyExtractor={item => item.id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    renderItem={({item, index}) => <WorkoutCards exerciseName={item.exercise_name} numberOfReps={item.reps} numberOfSets={item.sets} weight={item.weight} weightType={item.weight_type} workout_index={index} />}
+                    renderItem={({item, index}) => <WorkoutCards 
+                            exercise_name={item.exercise_name} 
+                            reps={item.reps} 
+                            sets={item.sets} 
+                            weight={item.weight} 
+                            weight_type={item.weight_type} 
+                            workout_index={index}
+                            id={item.id} 
+                            created={item.created}
+                            updated={item.updated}
+                            future_reps={item.future_reps}
+                            future_sets={item.future_sets}
+                            future_weight={item.future_weight}
+                        />
+                    }
                 />
                 
                 :

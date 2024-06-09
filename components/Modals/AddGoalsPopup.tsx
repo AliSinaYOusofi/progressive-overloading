@@ -20,8 +20,6 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
     const [goalName, setGoalName] = useState<string>("")
     const [goalDescription, setGoalDescription] = useState<string>("")
     const [timeToComplete, setTimeToComplete] = useState<any>(0)
-    const [remindMe, setRemindMe] = useState<boolean>(false);
-    const toggleSwitch = () => setRemindMe(previousState => !previousState);
     
     const { setRefreshGoalsDatabase } = useAppContext()
 
@@ -47,8 +45,8 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
 
         try {
             
-            let statement = await progressive_overloading.prepareAsync("INSERT INTO goals (goal_title, description, complete_in, time_to_complete, remind_me, created, updated, acheived) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-            await statement.executeAsync([goalName, goalDescription, timeToComplete, time_to_complete, remindMe, new Date().toISOString(), new Date().toISOString(), 0])
+            let statement = await progressive_overloading.prepareAsync("INSERT INTO goals (goal_title, description, complete_in, time_to_complete, created, updated, acheived) VALUES (?, ?, ?, ?, ?, ?, ?)")
+            await statement.executeAsync([goalName, goalDescription, timeToComplete, time_to_complete, new Date().toISOString(), new Date().toISOString(), 0])
             ToastAndroid.show("goal added", ToastAndroid.LONG)
             setRefreshGoalsDatabase(prev => ! prev)
             
@@ -73,7 +71,6 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
                     description TEXT,
                     complete_in TEXT,
                     time_to_complete TIMESTAMP,
-                    remind_me INTEGER,
                     created TIMESTAMP,
                     updated TIMESTAMP,
                     acheived INTEGER
@@ -126,7 +123,7 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
                     />
                 </View>
             
-                <View style={[ {flexDirection: 'row', justifyContent: "flex-start", "alignItems" : "center"}]}>
+                {/* <View style={[ {flexDirection: 'row', justifyContent: "flex-start", "alignItems" : "center"}]}>
 
                     <ThemedText style={{alignSelf: "center", fontWeight: "bold"}}> Remind me : </ThemedText>
                     <Switch
@@ -138,7 +135,7 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
                         style={{marginTop: 3}}
                     />
                     
-                </View>
+                </View> */}
 
                 <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50}]}>
                     <TouchableOpacity onPress={addNewExercise}>

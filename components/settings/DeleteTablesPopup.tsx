@@ -48,7 +48,7 @@ export default function DeleteTablesPopup({ tables, toggleModal, clearGoals, cle
     return (
         <View style={styles.modalContainer}>
             <View style={[styles.popup_container, { backgroundColor: colorScheme === 'dark' ? '#333' : '#fff' }]}>
-                <ThemedText style={{ fontWeight: "bold" }}>Are you sure you want to delete the selected data?</ThemedText>
+                <ThemedText style={{ fontWeight: "bold" }}>Delete the selected table ?</ThemedText>
                 <ThemedText>This action cannot be undone.</ThemedText>
 
                 <View style={styles.button_views}>

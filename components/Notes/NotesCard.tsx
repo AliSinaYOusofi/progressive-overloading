@@ -21,6 +21,7 @@ const NotesCard = (notes: notes) => {
                 
                 <ThemedText style={styles.title}>{notes.title}</ThemedText>
                 
+                <View style={styles.just_for_border}/>
                 <View style={styles.detailContainer}>
                     <ThemedText style={styles.detail}>{notes.content}</ThemedText>
                 </View>
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
+        
     },
     card: {
         borderRadius: 10,
@@ -135,6 +137,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         marginLeft: 10
+    },
+
+    just_for_border: {
+        borderColor: "#ddd",
+        borderWidth: 0.3,
+        marginBottom: 10
     }
 });
 

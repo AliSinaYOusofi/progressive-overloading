@@ -14,8 +14,8 @@ export type notes = {
     id : number,
     title: string,
     content: string,
-    created: Date,
-    updated: Date
+    created: string,
+    updated: string
 }
 
 export default function AddNotesPopup({toggleModal} : toggle) {
