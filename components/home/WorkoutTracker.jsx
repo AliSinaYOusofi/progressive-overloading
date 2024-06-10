@@ -56,6 +56,7 @@ export default function WorkoutTracker() {
                             future_reps={item.future_reps}
                             future_sets={item.future_sets}
                             future_weight={item.future_weight}
+                            achevied={item.acheived}
                         />
                     }
                 />

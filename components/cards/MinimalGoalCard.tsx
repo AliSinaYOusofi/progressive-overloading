@@ -1,8 +1,9 @@
-import React from 'react';
-import { View, StyleSheet, useColorScheme, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, useColorScheme, TouchableOpacity, Dimensions, Modal } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
-
+import GoalsDetailsPopup from '../Detaill on click/GoalsDetailsPopup'
+import Goals from '@/app/(tabs)/goals';
 export type GoalProps = {
     goalTitle: string,
     description: string,
@@ -10,16 +11,20 @@ export type GoalProps = {
     remindMe: boolean,
     goal_index: number,
     complete_in: string,
-    created: Date,
-    updated: Date,
-    achieved: number
+    created: string,
+    updated: string,
+    achieved: number,
 }
 
-export default function MinimalGoalCard({ goalTitle, description, timeToComplete, remindMe, goal_index }: GoalProps) {
+export default function MinimalGoalCard({ goalTitle, description, timeToComplete, complete_in, goal_index, created, updated, achieved }: GoalProps) {
+    
+    const [modal, setModal] = useState<boolean>(false)
+
     const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8}
 
     return (
-            <TouchableOpacity style={[styles.container, borderOfCards]}>
+        <>
+            <TouchableOpacity onPress={() => setModal(true)} style={[styles.container, borderOfCards]}>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
                 <ThemedText numberOfLines={2} style={styles.description}>{description}</ThemedText>
                 
@@ -28,6 +33,25 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
                     <ThemedText style={styles.details}>Remaining : {distanceFromNowInDays(timeToComplete)} day(s)</ThemedText>
                 </View>
             </TouchableOpacity>
+
+            <Modal
+                visible={modal}
+                onRequestClose={() => setModal(false)}
+                animationType='slide'
+                transparent={true}
+            >
+                <GoalsDetailsPopup 
+                    goalTitle={goalTitle}
+                    onClose={setModal}
+                    description={description}
+                    created={created}
+                    updated={updated}
+                    timeToComplete={timeToComplete}
+                    complete_in={complete_in}
+                    achieved={achieved}
+                />
+            </Modal>
+        </>
     );
 }
 

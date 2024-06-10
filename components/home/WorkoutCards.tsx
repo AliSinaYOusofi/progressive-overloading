@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
-import { Dimensions, StyleSheet, useColorScheme, View } from 'react-native';
+import { Dimensions, Modal, StyleSheet, useColorScheme, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
-
+import WorkoutDetailsPopup from '../Detaill on click/WorkoutDetailsPopup'
+import UpdateGoalsPopup from '../Modals/UpdateGoalsPopup';
 export type Exercise = {
   id: number; 
   exercise_name: string; 
@@ -15,6 +16,8 @@ export type Exercise = {
   future_reps: number; 
   future_weight: number;
   created: string;
+  updated: string;
+  achevied: boolean
 };
 
 export default function WorkoutCards({
@@ -26,53 +29,82 @@ export default function WorkoutCards({
   future_sets, 
   future_reps, 
   future_weight, 
-  created
+  created,
+  updated,
+  achevied,
+  ...props
 }: Exercise) {
     
   const colorScheme = useColorScheme();
   
   const textColor = colorScheme === 'dark' ? '#fff' : '#000';
   const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8 };
+  const [modal, setModal] = useState< boolean> (false)
 
   return (
-    <TouchableOpacity>
-      <ThemedView style={[styles.card, borderOfCards]}>
-        <ThemedText style={[styles.exercise_name, { color: textColor }]}>
-          {exercise_name}
-        </ThemedText>
-        <View style={styles.divider} />
-        <ThemedView style={[styles.details_container, styles.row]}>
-          <ThemedText style={[styles.details_title, { color: textColor }]}>
-            Current :
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {sets} sets
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {reps} reps
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {weight} {weight_type}
-          </ThemedText>
+    <>
+        <TouchableOpacity onPress={() => setModal(true)}>
+        <ThemedView style={[styles.card, borderOfCards]}>
+            <ThemedText style={[styles.exercise_name, { color: textColor }]}>
+            {exercise_name}
+            </ThemedText>
+            <View style={styles.divider} />
+            <ThemedView style={[styles.details_container, styles.row]}>
+            <ThemedText style={[styles.details_title, { color: textColor }]}>
+                Current :
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {sets} sets
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {reps} reps
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {weight} {weight_type}
+            </ThemedText>
+            </ThemedView>
+            <ThemedView style={[styles.details_container, styles.row]}>
+            <ThemedText style={[styles.details_title, { color: textColor }]}>
+                Future :
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {future_sets} sets
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {future_reps} reps
+            </ThemedText>
+            <ThemedText style={[styles.details, { color: textColor }]}>
+                {future_weight} {weight_type}
+            </ThemedText>
+            </ThemedView>
+            <View style={styles.divider} />
+            
         </ThemedView>
-        <ThemedView style={[styles.details_container, styles.row]}>
-          <ThemedText style={[styles.details_title, { color: textColor }]}>
-            Future :
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {future_sets} sets
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {future_reps} reps
-          </ThemedText>
-          <ThemedText style={[styles.details, { color: textColor }]}>
-            {future_weight} {weight_type}
-          </ThemedText>
-        </ThemedView>
-        <View style={styles.divider} />
-        
-      </ThemedView>
-    </TouchableOpacity>
+        </TouchableOpacity>
+
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modal}
+            onRequestClose={() => setModal(false)}
+        >
+            <WorkoutDetailsPopup 
+                exercise_name={exercise_name}
+                sets={sets}
+                reps={reps}
+                weight={weight}
+                weight_type={weight_type}
+                future_reps={future_reps}
+                future_sets={future_sets}
+                future_weight={future_weight}
+                created={created}
+                updated={updated}
+                achevied={achevied}
+                toggleModal={setModal}
+                id={4}
+            />
+        </Modal>
+    </>
   );
 }
 
