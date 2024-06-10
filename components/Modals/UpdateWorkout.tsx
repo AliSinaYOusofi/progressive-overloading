@@ -99,7 +99,7 @@ export default function UpdateWorkout({toggleModal, workout} : updateWorkout) {
         
         // current date and time
         // update the table entry
-        const currentDate = new Date().toLocaleString()
+        const currentDate = new Date().toISOString()
 
         let statement = await progressive_overloading.prepareAsync("UPDATE progressive_overloading SET exercise_name = ?, exercise_description = ?, sets = ?, reps = ?, weight = ?, weight_type = ?, future_reps = ?, future_sets  = ?, future_weight = ?, updated = ? WHERE id = ?");
         
@@ -218,7 +218,7 @@ export default function UpdateWorkout({toggleModal, workout} : updateWorkout) {
                     </View>
                 </View>
             
-                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 4,}]}>
+                <ThemedView style={[styles.container, { backgroundColor: colorScheme === "dark" ? 'white' : 'black', borderRadius: 50,}]}>
                     <TouchableOpacity onPress={updateExercise}>
                         <ThemedText style={[styles.text, { color: colorScheme !== "dark" ? 'white' : 'black'}]}>
                             Update exercise

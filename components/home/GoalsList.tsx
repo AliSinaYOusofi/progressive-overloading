@@ -56,7 +56,7 @@ const GoalCard = ({ goal }: GoalCardProps) => {
                     <ThemedText style={styles.detail}>I will complete in: {goal.complete_in}</ThemedText>
                     <ThemedText style={styles.detail}>Remaining days: {distanceFromNowInDays(goal.time_to_complete)}</ThemedText>
                     <ThemedText style={styles.detail}>Time to Complete: {goal.time_to_complete.split("T")[0]}</ThemedText>
-                    <ThemedText style={styles.detail}>Remind Me: {goal.remind_me ? 'Yes' : 'No'}</ThemedText>
+                    {/* <ThemedText style={styles.detail}>Remind Me: {goal.remind_me ? 'Yes' : 'No'}</ThemedText> */}
                 </View>
                 
                 <ThemedText style={styles.date}>Created: {new Date(goal.created).toDateString()}</ThemedText>

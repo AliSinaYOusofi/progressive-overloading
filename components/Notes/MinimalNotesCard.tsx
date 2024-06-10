@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemedText } from '../ThemedText';
 import { notes } from './AddNotesPopup';
-import { Dimensions, StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native';
+import { Dimensions, Modal, StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { formatDistanceToNowStrict } from 'date-fns';
+import NotesDetailsPopup from '../Detaill on click/NotesDetailsPopup';
 
 export default function MinimalNotesCard({ id, title, content: body, created, updated }: notes) {
 
+    const [modal, setModal] = useState<boolean>(false)
     const borderOfCards = { borderColor: "#ddd", borderWidth: 1, borderRadius: 8 };
 
     return (
-        
-            <TouchableOpacity style={[styles.container, borderOfCards]}>
+        <>
+            <TouchableOpacity onPress={() => setModal(true)} style={[styles.container, borderOfCards]}>
                 <ThemedText style={styles.goalTitle}>{title}</ThemedText>
                 <View style={styles.justForBorder} />
                 <ThemedText numberOfLines={3} style={styles.description}>{body}</ThemedText>
                 <ThemedText style={styles.date_text}> Created : {created.split("T")[0]} ({formatDistanceToNowStrict(new Date(created))}) ago</ThemedText>
             </TouchableOpacity>
+
+            <Modal
+                visible={modal}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setModal(false)}
+            >
+                <NotesDetailsPopup
+                    toggleModal={setModal}
+                    note={{id, title, content: body, created, updated}}
+                />
+            </Modal>
+        </>
         
     );
 }
