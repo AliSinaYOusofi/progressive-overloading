@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "my-app",
+    "name": "Progressive-overloading",
     "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -32,5 +32,11 @@
     "experiments": {
       "typedRoutes": true
     }
+  },
+  
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-1665900038997295~7752380128",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
   }
+  
 }
