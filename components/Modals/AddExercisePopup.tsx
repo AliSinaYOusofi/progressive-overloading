@@ -73,7 +73,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
         const currentDate = new Date().toISOString();
         let statement = await progressive_overloading.prepareAsync("INSERT INTO progressive_overloading(exercise_name, exercise_description, sets, reps, weight, weight_type, future_sets, future_reps, future_weight, created, updated, acheived) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        const result = await statement.executeAsync([exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType, futureNumberOfReps, futureNumberOfSets, futureWeight, currentDate, currentDate, 0])
+        await statement.executeAsync([exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType, futureNumberOfReps, futureNumberOfSets, futureWeight, currentDate, currentDate, 0])
         setRefreshDatabaseFetch( prev => ! prev)
         ToastAndroid.show("Exercise added", ToastAndroid.LONG)
         toggleModal(false)
@@ -107,7 +107,6 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                 console.error("error creating table", error)
                 ToastAndroid.show("failed to create table", ToastAndroid.LONG)
             }
-            
         }
 
         createTable()
