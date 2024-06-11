@@ -6,7 +6,6 @@ import { TouchableOpacity } from 'react-native'
 import { ThemedText } from '../ThemedText'
 import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
-import { Picker } from '@react-native-picker/picker'
 import { useAppContext } from '@/context/ContextProvider'
 import parseNaturalLanguageDate from '@/utils/parseNaturalLanguageDate'
 
@@ -59,12 +58,9 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
     }
 
     useEffect( () => {
-        // create goal table
-
         const createGoalTable = async () : Promise<void> => {
             try {
 
-                // await progressive_overloading.execAsync("DROP TABLE IF EXISTS goals")
                 await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     goal_title TEXT,
@@ -106,14 +102,16 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
                     <TextInput
                         placeholder='Goal Descriptoin'
                         value={goalDescription}
+                        numberOfLines={3}
+                        multiline={true}
                         onChangeText={text => setGoalDescription(text)}
-                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2'}]}
+                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', textAlignVertical: "top"}]}
                     />
                 </View>
 
                 <View style={[styles.inputs, {flexDirection: 'column'}]}>
 
-                    <ThemedText style={{alignSelf: "flex-start", marginBottom: 5, fontWeight: "bold"}}> I will acheive this goal in : </ThemedText>
+                    <ThemedText style={{alignSelf: "flex-start", marginBottom: 10, fontWeight: "bold", marginLeft: 10}}> I will acheive this goal in : </ThemedText>
                     <TextInput
                         value={timeToComplete}
                         onChangeText={text => setTimeToComplete(text)}

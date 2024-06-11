@@ -15,8 +15,8 @@ export type Goal = {
     description: string,
     time_to_complete: string,
     remind_me: boolean,
-    created: Date,
-    updated: Date,
+    created: string,
+    updated: string,
     achevied: number
     complete_in: string
 }

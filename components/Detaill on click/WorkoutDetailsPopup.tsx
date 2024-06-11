@@ -17,7 +17,7 @@ type props = {
     future_weight: number;
     created: string;
     updated: string;
-    achevied: number;
+    achevied: boolean;
     toggleModal: (toggle: boolean) => void;
 }
 

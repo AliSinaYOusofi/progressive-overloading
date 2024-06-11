@@ -8,6 +8,7 @@ import UpdateGoalsPopup from '../Modals/UpdateGoalsPopup';
 import distanceFromNowInDays from '@/utils/returnDistanceInDays';
 import { progressive_overloading } from '@/db/sqlitedb';
 import { useAppContext } from '@/context/ContextProvider';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 export type Goal = {
     id: number;
@@ -50,18 +51,19 @@ const AchievedGoalsCard = ({ goal }: GoalCardProps) => {
             <ThemedView style={[styles.card, borderOfCards]}>
                 
                 <ThemedText style={styles.title}>{goal.goal_title}</ThemedText>
-                
+                <View style={styles.justForBorder} />
                 <View style={styles.detailContainer}>
                     <ThemedText style={styles.detail}>Description: {goal.description}</ThemedText>
+                    <View style={styles.justForBorder} />
                     <ThemedText style={styles.detail}>I will complete in: {goal.complete_in}</ThemedText>
                     <ThemedText style={styles.detail}>Remaining days: {distanceFromNowInDays(goal.time_to_complete)}</ThemedText>
                     <ThemedText style={styles.detail}>Time to Complete: {goal.time_to_complete.split("T")[0]}</ThemedText>
                     {/* <ThemedText style={styles.detail}>Remind Me: {goal.remind_me ? 'Yes' : 'No'}</ThemedText> */}
                 </View>
                 
-                <ThemedText style={styles.date}>Created: {new Date(goal.created).toDateString()}</ThemedText>
+                <ThemedText style={styles.date}>Created: {new Date(goal.created).toDateString()} ({formatDistanceToNowStrict(goal.created)}) ago</ThemedText>
                 
-                <ThemedText style={styles.date}>Updated: {new Date(goal.updated).toDateString()}</ThemedText>
+                <ThemedText style={styles.date}>Updated: {new Date(goal.updated).toDateString()} ({formatDistanceToNowStrict(goal.created)}) ago</ThemedText>
                 
                 <View style={styles.buttonContainer}>
                     
@@ -183,6 +185,11 @@ const styles = StyleSheet.create({
     },
     markAsInProgressBtn: {
         backgroundColor: '#00796B',
+    },
+    justForBorder: {
+        borderColor: "#ddd",
+        borderWidth: 0.3,
+        marginBottom: 10,
     },
 });
 
