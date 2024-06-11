@@ -16,6 +16,7 @@ export default function MinimalNotesCard({ id, title, content: body, created, up
                 <ThemedText style={styles.goalTitle}>{title}</ThemedText>
                 <View style={styles.justForBorder} />
                 <ThemedText numberOfLines={3} style={styles.description}>{body}</ThemedText>
+                
                 <ThemedText style={styles.date_text}> Created : {created.split("T")[0]} ({formatDistanceToNowStrict(new Date(created))}) ago</ThemedText>
             </TouchableOpacity>
 
@@ -41,10 +42,10 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         borderRadius: 10,
         alignSelf: 'center',
-        minWidth: Dimensions.get('window').width - 100,
-        maxWidth: Dimensions.get('window').width - 100,
-        minHeight: Dimensions.get('window').height - 600,
-        maxHeight: Dimensions.get('window').height - 600,
+        minWidth: 320,
+        maxWidth: 320,
+        minHeight: 200,
+        maxHeight:  200,
         columnGap: 5,
         marginRight: 4,
         overflow: "scroll",

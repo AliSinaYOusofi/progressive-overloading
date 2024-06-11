@@ -13,9 +13,6 @@ export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
 }
 
-
-
-
 export default function AddExercisePopup({toggleModal} : typeToggleModal) {
 
     const colorScheme = useColorScheme()
@@ -33,11 +30,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
     const { setRefreshDatabaseFetch } = useAppContext()
 
     const addNewExercise = async () : Promise<void> => {
-        // validate every field and show toast messages if wrong
-        // add new exercise to database
-        // close modal
-
-        // start validating fields
+        
         if (exerciseName === "") {
             ToastAndroid.show("Please enter an exercise name", ToastAndroid.LONG)
             return
@@ -156,7 +149,7 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                             onChangeText={text => setCurrentNumberofSets(text)}
                             placeholder='Sets'
                             keyboardType='numeric'
-                            style={{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: "40%", padding: 10, borderRadius: 4}}
+                            style={{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: "25%", padding: 10, borderRadius: 4}}
                         />
 
                         <TextInput
@@ -164,20 +157,22 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                             onChangeText={text => setCurrentNumberOfReps(text)}
                             placeholder='Reps'
                             keyboardType='numeric'
-                            style={[{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: '40%', padding: 10, borderRadius: 4}]} 
+                            style={[{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: '25%', padding: 10, borderRadius: 4}]} 
+                        />
+
+                        <TextInput
+                            value={currentWeight}
+                            onChangeText={text => setCurrentWeight(text)}
+                            placeholder='weight'
+                            keyboardType='numeric'
+                            style={[{backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', width: '25%', padding: 10, borderRadius: 4}]} 
                         />
                     </View>
                     
                 </View>
 
                 <View style={[styles.inputs, {flexDirection: 'row'}]}>
-                    <TextInput
-                        value={currentWeight}
-                        onChangeText={text => setCurrentWeight(text)}
-                        placeholder='weight'
-                        keyboardType='numeric'
-                        style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', borderRadius: 4,}]}
-                    />
+                    
                 </View>
 
                 <View style={styles.current_and_future_details}>
@@ -214,11 +209,12 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
                             style={[styles.inputs, {backgroundColor: colorScheme === "dark" ? 'white' : '#F6F5F2', borderRadius: 4,}]}
                         />
                     </View>
+
                     <View style={{width: "35%"}}>
                         <Picker
                             selectedValue={weightType}
                             onValueChange={(itemValue) => setWeightType(itemValue)}
-                            style={[styles.inputs, { backgroundColor: colorScheme === 'dark' ? 'white' : '#F6F5F2', borderRadius: 14, }]}
+                            style={[styles.inputs, { backgroundColor: colorScheme === 'dark' ? 'white' : '#F6F5F2', borderRadius: 14, minHeight: 50}]}
                             >
                             <Picker.Item label="kg" value="kg" />
                             <Picker.Item label="lb" value="lb" />
@@ -280,7 +276,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
-        borderRadius: 4,
+        
         position: "relative"
     },
 
@@ -334,8 +330,8 @@ const styles = StyleSheet.create({
     current_and_future_text : {
         fontWeight: "bold",
         fontSize: 16,
-        marginBottom: 10,
+        marginBottom: 4,
         marginLeft: "7%",
-        marginTop: 10
+        marginTop:0
     }
 })

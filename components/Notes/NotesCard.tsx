@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { notes } from './AddNotesPopup';
 import DeleteNote from './DeleteNote';
 import EditNotesPopup from './EditNotesPopup';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 
 const NotesCard = (notes: notes) => {
@@ -26,9 +27,9 @@ const NotesCard = (notes: notes) => {
                     <ThemedText style={styles.detail}>{notes.content}</ThemedText>
                 </View>
                 
-                <ThemedText style={styles.date}>Created: {new Date(notes.created).toDateString()}</ThemedText>
+                <ThemedText style={styles.date}>Created: {new Date(notes.created).toDateString()} ({formatDistanceToNowStrict(notes.created)}) ago</ThemedText>
                 
-                <ThemedText style={styles.date}>Updated: {new Date(notes.updated).toDateString()}</ThemedText>
+                <ThemedText style={styles.date}>Updated: {new Date(notes.updated).toDateString()} ({formatDistanceToNowStrict(notes.updated)}) ago</ThemedText>
                 
                 <View style={styles.buttonContainer}>
                     

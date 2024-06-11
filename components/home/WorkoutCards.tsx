@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     
-    minWidth: Dimensions.get('window').width - 100,
-    maxWidth: Dimensions.get('window').width - 100,
-    minHeight: Dimensions.get('window').height - 600,
-    maxHeight: Dimensions.get('window').height - 600,
+    minWidth: 320,
+    maxWidth: 320,
+    minHeight: 200,
+    maxHeight:  200,
   },
   exercise_name: {
     fontSize: 20,

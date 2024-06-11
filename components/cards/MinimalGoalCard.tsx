@@ -26,6 +26,7 @@ export default function MinimalGoalCard({ goalTitle, description, timeToComplete
         <>
             <TouchableOpacity onPress={() => setModal(true)} style={[styles.container, borderOfCards]}>
                 <ThemedText style={styles.goalTitle}>{goal_index}. {goalTitle}</ThemedText>
+                <View style={styles.justForBorder} />
                 <ThemedText numberOfLines={2} style={styles.description}>{description}</ThemedText>
                 
                 <View style={styles.date_view}>
@@ -60,10 +61,10 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 8,
         borderRadius: 8,
-        minWidth: Dimensions.get('window').width - 100,
-        maxWidth: Dimensions.get('window').width - 100,
-        minHeight: Dimensions.get('window').height - 600,
-        maxHeight: Dimensions.get('window').height - 600,
+        minWidth: 320,
+        maxWidth: 320,
+        minHeight: 200,
+        maxHeight:  200,
         marginRight: 4,
         overflow: "scroll",
         position: "relative"
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
     details: {
         fontSize: 14,
         marginBottom: 4,
+        color: "gray",
     },
     remindMe: {
         fontSize: 14,
@@ -92,5 +94,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
         left: 16,
-    }
+    },
+    justForBorder: {
+        borderColor: "#ddd",
+        borderWidth: 0.3,
+        marginBottom: 10,
+    },
 });

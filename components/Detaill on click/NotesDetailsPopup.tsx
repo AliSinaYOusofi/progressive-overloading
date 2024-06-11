@@ -24,26 +24,32 @@ export default function NotesDetailsPopup({ note, toggleModal }: Props) {
     const textColor = colorScheme === 'dark' ? '#fff' : '#000';
     const cardBackground = colorScheme === 'dark' ? '#1c1c1c' : '#f9f9f9';
     const modalBackground = colorScheme === 'dark' ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.7)';
-
+    
     return (
         <View style={[styles.modalContainer, { backgroundColor: modalBackground }]}>
            
             <View style={[styles.modalContent, { backgroundColor: cardBackground }]}>
+                
                 <TouchableOpacity onPress={() => toggleModal(false)} style={styles.closeButton}>
                     <Ionicons name="close" size={24} color={textColor} />
                 </TouchableOpacity>
+                
                 <ScrollView contentContainerStyle={styles.scrollView}>
+                
                     <ThemedText style={[styles.modalTitle, { color: textColor }]}>
                         {title}
                     </ThemedText>
                     <View style={styles.modalDivider} />
+                    
                     <ThemedText style={[styles.modalText, { color: textColor }]}>
                         {content}
                     </ThemedText>
                     <View style={styles.modalDivider} />
+                    
                     <ThemedText style={[styles.modalText, { color: textColor }]}>
                         Created: {created.split('T')[0]} {formatDistanceToNowStrict(new Date(created))} ago
                     </ThemedText>
+                    
                     <ThemedText style={[styles.modalText, { color: textColor }]}>
                         Updated: {updated.split('T')[0]} {formatDistanceToNowStrict(new Date(updated))} ago
                     </ThemedText>
