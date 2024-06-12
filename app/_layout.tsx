@@ -5,8 +5,15 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { ContextProvider } from '../context/ContextProvider';
-
 import { useColorScheme } from '@/hooks/useColorScheme';
+import mobileAds from 'react-native-google-mobile-ads';
+
+mobileAds()
+  .initialize()
+  .then(adapterStatuses => {
+    console.log("ads inited")
+  });
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

@@ -44,42 +44,42 @@ export default function WorkoutCards({
   return (
     <>
         <TouchableOpacity onPress={() => setModal(true)}>
-        <ThemedView style={[styles.card, borderOfCards]}>
-            <ThemedText style={[styles.exercise_name, { color: textColor }]}>
-            {exercise_name}
-            </ThemedText>
-            <View style={styles.divider} />
-            <ThemedView style={[styles.details_container, styles.row]}>
-            <ThemedText style={[styles.details_title, { color: textColor }]}>
-                Current :
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {sets} sets
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {reps} reps
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {weight} {weight_type}
-            </ThemedText>
-            </ThemedView>
-            <ThemedView style={[styles.details_container, styles.row]}>
-            <ThemedText style={[styles.details_title, { color: textColor }]}>
-                Future :
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {future_sets} sets
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {future_reps} reps
-            </ThemedText>
-            <ThemedText style={[styles.details, { color: textColor }]}>
-                {future_weight} {weight_type}
-            </ThemedText>
-            </ThemedView>
-            <View style={styles.divider} />
-            
-        </ThemedView>
+          <ThemedView style={[styles.card, borderOfCards]}>
+              <ThemedText style={[styles.exercise_name, { color: textColor }]}>
+              {exercise_name}
+              </ThemedText>
+              <View style={styles.divider} />
+              <ThemedView style={[styles.details_container, styles.row]}>
+              <ThemedText style={[styles.details_title, { color: textColor }]}>
+                  Current :
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {sets} sets
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {reps} reps
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {weight} {weight_type}
+              </ThemedText>
+              </ThemedView>
+              <ThemedView style={[styles.details_container, styles.row]}>
+              <ThemedText style={[styles.details_title, { color: textColor }]}>
+                  Future :
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {future_sets} sets
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {future_reps} reps
+              </ThemedText>
+              <ThemedText style={[styles.details, { color: textColor }]}>
+                  {future_weight} {weight_type}
+              </ThemedText>
+              </ThemedView>
+              <View style={styles.divider} />
+              
+          </ThemedView>
         </TouchableOpacity>
 
         <Modal
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     minHeight: 200,
     maxHeight:  200,
+    marginLeft: 5
   },
   exercise_name: {
     fontSize: 20,

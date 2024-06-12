@@ -1,19 +1,21 @@
 import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, ToastAndroid } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, ToastAndroid, View } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import { notes } from '@/components/Notes/AddNotesPopup'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { useAppContext } from '@/context/ContextProvider'
 import NotesCard from '@/components/Notes/NotesCard'
 import NoNotesAddedCard from '@/components/cards/NoNotesAddedCard'
-
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 export default function Notes() {
 
     const [ Note, setNotes] = useState<notes[]>([])
     const { refreshNOtesTable } = useAppContext()
-    
+    const bannerRef = useRef(null);
+
     useEffect(() => {
         const fetchGoals = async (): Promise<void> => {
             try {
@@ -31,6 +33,8 @@ export default function Notes() {
     return (
         <ParallaxScrollView headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
         headerImage={<FontAwesome name="sticky-note" size={410} style={styles.headerImage} />} >
+            
+            <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
             <ThemedText style={styles.goal_text}> 3. Sticky Notes ({Note.length})</ThemedText>
             {
                 Note.length

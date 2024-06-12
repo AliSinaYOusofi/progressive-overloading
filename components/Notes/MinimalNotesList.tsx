@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ThemedView } from '../ThemedView'
 import { ThemedText } from '../ThemedText'
-import { FlatList, StyleSheet, ToastAndroid } from 'react-native'
+import { FlatList, StyleSheet, ToastAndroid, View } from 'react-native'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { useAppContext } from '@/context/ContextProvider'
 import NoNotesAddedCard from '../cards/NoNotesAddedCard'
 import AddNotesButton from './AddNotesButton'
 import MinimalNotesCard from './MinimalNotesCard'
 import { notes } from './AddNotesPopup'
-
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 
 export default function MinimalNotesList() {
     
     const [notes, setNotes] = useState<notes[]>([])
     const { refreshNOtesTable } = useAppContext()
+    const bannerRef = useRef(null);
 
     useEffect( () => {
         const fetchNotes = async () : Promise<void> => {
@@ -35,6 +37,8 @@ export default function MinimalNotesList() {
                 notes.length
                 ?
                 <FlatList
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     data={notes}
                     horizontal
                     keyExtractor={item => item.id.toString()}
@@ -44,6 +48,8 @@ export default function MinimalNotesList() {
                 <NoNotesAddedCard />
             }
             <AddNotesButton />
+            <View style={{marginTop: 20}}/>
+            <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
         </ThemedView>
     )
 }

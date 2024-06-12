@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import React, { useEffect } from 'react'
 import { View, Text, StyleSheet, ToastAndroid, FlatList } from 'react-native'
 import { ThemedText } from '../ThemedText'
@@ -8,12 +8,16 @@ import AddExerciseButton from './AddExerciseButton'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { useAppContext } from '@/context/ContextProvider'
 import NoWorkoutsAdded from '../cards/NoWorkoutsAdded'
+import { Platform } from 'react-native';
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 export default function WorkoutTracker() {
 
     const [workouts, setWorkouts] = useState([])
     
     const { refreshDatabaseFetch } = useAppContext()
+    const bannerRef = useRef(null);
 
     useEffect( () => {
         // fetch workouts from database
@@ -40,6 +44,7 @@ export default function WorkoutTracker() {
                 ?
                 <FlatList
                     data={workouts}
+                    showsVerticalScrollIndicator={false}
                     keyExtractor={item => item.id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
@@ -65,6 +70,8 @@ export default function WorkoutTracker() {
                 <NoWorkoutsAdded />
             }
             <AddExerciseButton />
+            <View style={{marginTop: 20}}/>
+            <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
         </ThemedView>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -9,7 +9,8 @@ import AcheviedWorkouts from '@/components/home/AcheviedWorkouts';
 import { progressive_overloading } from '@/db/sqlitedb';
 import { useAppContext } from '@/context/ContextProvider';
 import { ThemedText } from '@/components/ThemedText';
-
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 type Workout = {
   id: number;
   exercise_name: string;
@@ -31,6 +32,7 @@ export default function TabTwoScreen() {
   const [view, setView] = useState<'progress' | 'achieved'>('progress');
   const { refreshDatabaseFetch } = useAppContext();
   const colorScheme = useColorScheme();
+  const bannerRef = useRef(null);
 
   useEffect(() => {
     const fetchWorkout = async () => {
@@ -51,6 +53,7 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<FontAwesome6 size={310} name="dumbbell" style={styles.headerImage} />}
     >
+      <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
         1. Progressive overloading
       </ThemedText>
