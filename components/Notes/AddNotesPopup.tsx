@@ -5,7 +5,8 @@ import { progressive_overloading } from '@/db/sqlitedb'
 import { ThemedView } from '../ThemedView'
 import { Ionicons } from '@expo/vector-icons'
 import { useAppContext } from '@/context/ContextProvider'
-
+import { AdEventType } from 'react-native-google-mobile-ads';
+import { interstitialAds } from '../Modals/AddGoalsPopup'
 export type toggle = {
     toggleModal: (arg : boolean) => void,
 }
@@ -25,29 +26,17 @@ export default function AddNotesPopup({toggleModal} : toggle) {
 
     const colorScheme = useColorScheme()
     const { setRefresNotesTable } = useAppContext()
+    const [loaded, setLoaded] = useState(false);
 
-    useEffect( () => {
-        // create goal table
+    useEffect(() => {
+        const unsubscribe = interstitialAds.addAdEventListener(AdEventType.LOADED, () => {
+        setLoaded(true);
+        });
 
-        const createNotesTable = async () : Promise<void> => {
-            try {
+        interstitialAds.load();
 
-                
-                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS notes (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    title TEXT,
-                    content TEXT,
-                    created TIMESTAMP,
-                    updated TIMESTAMP
-                )`)
-                console.log("notes table created")
-            } catch (error) {
-                console.error("error creating goals table", error)
-                ToastAndroid.show("error creating notes table", ToastAndroid.LONG)
-            }
-        }
-        createNotesTable()
-    }, [])
+        return unsubscribe;
+    }, []);
 
     const addNewExercise = async () : Promise<void> => {
         
@@ -67,6 +56,8 @@ export default function AddNotesPopup({toggleModal} : toggle) {
             await statement.executeAsync([notesTitle, notesContent, new Date().toISOString(), new Date().toISOString()])
             ToastAndroid.show("note added", ToastAndroid.LONG)
             setRefresNotesTable(prev => ! prev)
+
+            if (loaded) interstitialAds.show()
         } catch (error) {
             console.error("error adding new goal", error)
             ToastAndroid.show("error adding new goal", ToastAndroid.LONG)

@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import WorkoutTracker from '../../components/home/WorkoutTracker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { useEffect, useState } from 'react';
 import { getRandomImage } from '@/utils/randomImageIndexGenerator';
 import GoalSetting from '@/components/home/GoalSetting';
 import MinimalNotesList from '@/components/Notes/MinimalNotesList';
+import { progressive_overloading } from '@/db/sqlitedb';
 
 export default function HomeScreen() {
   const [image, setImage] = useState({src: "", name: ""});
@@ -16,6 +17,75 @@ export default function HomeScreen() {
 
   const headerImage = <Image src={image.src} style={styles.headerImage} />
 
+  useEffect( () => {
+    const createTable = async () : Promise<void> => {
+
+        try {
+            await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                exercise_name TEXT,
+                exercise_description TEXT,
+                sets INTEGER,
+                reps INTEGER,
+                weight INTEGER,
+                weight_type TEXT,
+                future_sets INTEGER,
+                future_reps INTEGER,
+                future_weight INTEGER,
+                created TIMESTAMP,
+                updated TIMESTAMP,
+                acheived INTEGER
+            );`)
+
+            console.log("table created")
+            
+        } 
+        
+        catch (error) {
+          console.error("error creating table", error)
+          ToastAndroid.show("failed to create table", ToastAndroid.LONG)
+        }
+    }
+    
+    const createGoalTable = async () : Promise<void> => {
+      try {
+
+          await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              goal_title TEXT,
+              description TEXT,
+              complete_in TEXT,
+              time_to_complete TIMESTAMP,
+              created TIMESTAMP,
+              updated TIMESTAMP,
+              acheived INTEGER
+          )`)
+          console.log("goals table created")
+      } catch (error) {
+        console.error("error creating goals table", error)
+        ToastAndroid.show("error creating goals table", ToastAndroid.LONG)
+      }
+    }
+    const createNotesTable = async () : Promise<void> => {
+      try {
+          await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS notes (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              title TEXT,
+              content TEXT,
+              created TIMESTAMP,
+              updated TIMESTAMP
+          )`)
+          console.log("notes table created")
+      } catch (error) {
+        console.error("error creating goals table", error)
+        ToastAndroid.show("error creating notes table", ToastAndroid.LONG)
+      }
+    }
+
+    createNotesTable()
+    createGoalTable()
+    createTable()
+}, [])
   return (
     <ParallaxScrollView 
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}

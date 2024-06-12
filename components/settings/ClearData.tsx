@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: "center",
         columnGap: 10,
-        
     },
 
     icon_and_text_container: {
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         borderColor: "#ddd",
-    
+        rowGap: 20
     },
 
     start_and_far_end: {

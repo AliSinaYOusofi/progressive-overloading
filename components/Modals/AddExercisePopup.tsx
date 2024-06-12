@@ -8,7 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { Picker } from '@react-native-picker/picker'
 import { useAppContext } from '@/context/ContextProvider'
-
+import { interstitialAds } from './AddGoalsPopup'
+import { AdEventType } from 'react-native-google-mobile-ads';
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void
 }
@@ -28,6 +29,18 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
     const [ futureWeight, setFutureWeight] = useState<any>(0)
 
     const { setRefreshDatabaseFetch } = useAppContext()
+
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = interstitialAds.addAdEventListener(AdEventType.LOADED, () => {
+        setLoaded(true);
+        });
+
+        interstitialAds.load();
+
+        return unsubscribe;
+    }, []);
 
     const addNewExercise = async () : Promise<void> => {
         
@@ -76,41 +89,10 @@ export default function AddExercisePopup({toggleModal} : typeToggleModal) {
         await statement.executeAsync([exerciseName, exerciseDescription, currentNumberOfSets, currentNumberOfReps, currentWeight, weightType, futureNumberOfReps, futureNumberOfSets, futureWeight, currentDate, currentDate, 0])
         setRefreshDatabaseFetch( prev => ! prev)
         ToastAndroid.show("Exercise added", ToastAndroid.LONG)
+
+        if (loaded) interstitialAds.show()
         toggleModal(false)
     }
-
-    useEffect( () => {
-        const createTable = async () : Promise<void> => {
-
-            try {
-                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    exercise_name TEXT,
-                    exercise_description TEXT,
-                    sets INTEGER,
-                    reps INTEGER,
-                    weight INTEGER,
-                    weight_type TEXT,
-                    future_sets INTEGER,
-                    future_reps INTEGER,
-                    future_weight INTEGER,
-                    created TIMESTAMP,
-                    updated TIMESTAMP,
-                    acheived INTEGER
-                );`)
-
-                console.log("table created")
-                
-            } 
-            
-            catch (error) {
-                console.error("error creating table", error)
-                ToastAndroid.show("failed to create table", ToastAndroid.LONG)
-            }
-        }
-
-        createTable()
-    }, [])
 
     return (
         <KeyboardAvoidingView style={[styles.modalContainer, ]}

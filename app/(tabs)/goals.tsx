@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -10,7 +10,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import AchievedGoalsCard from '@/components/cards/AcheivedGoalsCard';
 import NoAcheviedGoalsCard from '@/components/cards/NoAcheviedGoalsCard';
-
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 export type Goal = {
     id: number,
     goal_title: string,
@@ -28,7 +29,7 @@ export default function Goals() {
     const [view, setView] = useState<'inProgress' | 'achieved'>('inProgress');
     const { refreshGoalsDatabase } = useAppContext();
     const colorScheme = useColorScheme();
-
+    const bannerRef = useRef(null);
     useEffect(() => {
         const fetchGoals = async (): Promise<void> => {
             try {
@@ -48,6 +49,7 @@ export default function Goals() {
             headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
             headerImage={<Feather size={310} name="target" style={styles.headerImage} />}
         >
+            <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
             <ThemedText style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, marginHorizontal: 10, marginTop: 10 }}>
                 2. Goal Setting
             </ThemedText>

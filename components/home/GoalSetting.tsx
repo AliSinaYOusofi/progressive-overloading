@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ThemedView } from '../ThemedView'
 import { ThemedText } from '../ThemedText'
-import { FlatList, StyleSheet, ToastAndroid } from 'react-native'
+import { FlatList, StyleSheet, ToastAndroid, View } from 'react-native'
 import NoGoalsAdded from '../cards/NoGoalsAdded'
 import AddGoalsPopup from '../Modals/AddGoalsPopup'
 import AddGoalsButton from '../home/AddGoalsButton'
 import { progressive_overloading } from '@/db/sqlitedb'
 import MinimalGoalCard from '../cards/MinimalGoalCard'
 import { useAppContext } from '@/context/ContextProvider'
-
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 export type Goal = {
     id: number,
     goal_title: string,
@@ -20,10 +20,13 @@ export type Goal = {
     achevied: number
     complete_in: string
 }
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
+
 export default function GoalSetting() {
     
     const [goals, setGoals] = useState<Goal[]>([])
     const { refreshGoalsDatabase } = useAppContext()
+    const bannerRef = useRef(null);
 
     useEffect( () => {
         const fetchGoals = async () : Promise<void> => {
@@ -46,6 +49,8 @@ export default function GoalSetting() {
                 ?
                 <FlatList
                     data={goals}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     horizontal
                     keyExtractor={item => item.id.toString()}
                     renderItem={({item, index}) => <MinimalGoalCard goal_index={index}  complete_in={item.complete_in} key={item.id} goalTitle={item.goal_title} description={item.description} timeToComplete={item.time_to_complete} created={item.created} updated={item.updated} achieved={item.achevied} remindMe={item.remind_me}/>}
@@ -54,6 +59,8 @@ export default function GoalSetting() {
                 <NoGoalsAdded />
             }
             <AddGoalsButton />
+            <View style={{marginTop: 20}}/>
+            <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
         </ThemedView>
     )
 }

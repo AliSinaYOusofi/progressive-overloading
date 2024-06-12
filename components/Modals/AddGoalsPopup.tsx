@@ -8,6 +8,13 @@ import { Ionicons } from '@expo/vector-icons'
 import { progressive_overloading } from '@/db/sqlitedb'
 import { useAppContext } from '@/context/ContextProvider'
 import parseNaturalLanguageDate from '@/utils/parseNaturalLanguageDate'
+import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-1665900038997295/5732721441';
+
+export const interstitialAds = InterstitialAd.createForAdRequest(adUnitId, {
+    keywords: ['gym', 'fitness', 'workout', 'exercise', 'health', 'nutrition', 'muscle', 'training', 'weights', 'bodybuilding'],
+});
 
 export type typeToggleModal = {
     toggleModal: (toggle: boolean) => void;
@@ -48,6 +55,8 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
             await statement.executeAsync([goalName, goalDescription, timeToComplete, time_to_complete, new Date().toISOString(), new Date().toISOString(), 0])
             ToastAndroid.show("goal added", ToastAndroid.LONG)
             setRefreshGoalsDatabase(prev => ! prev)
+            if (loaded) interstitialAds.show()
+            console.log("ads not loaded")
             
         } catch (error) {
             console.error("error adding new goal", error)
@@ -57,28 +66,17 @@ export default function AddGoalsPopup({toggleModal} : typeToggleModal) {
         }
     }
 
-    useEffect( () => {
-        const createGoalTable = async () : Promise<void> => {
-            try {
+    const [loaded, setLoaded] = useState(false);
 
-                await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    goal_title TEXT,
-                    description TEXT,
-                    complete_in TEXT,
-                    time_to_complete TIMESTAMP,
-                    created TIMESTAMP,
-                    updated TIMESTAMP,
-                    acheived INTEGER
-                )`)
-                console.log("goals table created")
-            } catch (error) {
-                console.error("error creating goals table", error)
-                ToastAndroid.show("error creating goals table", ToastAndroid.LONG)
-            }
-        }
-        createGoalTable()
-    }, [])
+    useEffect(() => {
+        const unsubscribe = interstitialAds.addAdEventListener(AdEventType.LOADED, () => {
+        setLoaded(true);
+        });
+
+        interstitialAds.load();
+
+        return unsubscribe;
+    }, []);
 
     return (
         <KeyboardAvoidingView style={[styles.modalContainer, ]}

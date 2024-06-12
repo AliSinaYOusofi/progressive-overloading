@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.alisinayousofi.progressive"
     },
     "web": {
       "bundler": "metro",
@@ -31,12 +32,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7a20f1a6-7289-4dc6-9b68-0b68bb696118"
+      }
     }
   },
-  
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-1665900038997295~7752380128",
     "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
   }
-  
 }

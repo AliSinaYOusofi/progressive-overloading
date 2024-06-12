@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
     container: {
         width: "80%",
         marginTop: 80,
-        marginHorizontal: "auto"
+        marginHorizontal: "auto",
+        
     },
 
     icon_and_text: {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         borderColor: "#ddd",
-    
+        rowGap: 20
     },
 
     start_and_far_end: {
