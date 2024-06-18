@@ -54,9 +54,11 @@ const AchievedWorkoutCard = ({ workout }: AchievedWorkoutCardProps) => {
         <>
             <ThemedView style={[styles.card, borderOfCards]}>
                 <ThemedText style={styles.title}>{workout.exercise_name}</ThemedText>
+                <View style={styles.justForBorder} />
                 <ThemedText style={[styles.subtitle, { color: colorScheme === 'dark' ? '#c0c0c0' : '#333' }]}>Current:</ThemedText>
+                <ThemedText style={styles.detail}>{workout.exercise_description}</ThemedText>
+                <View style={styles.justForBorder} />
                 <View style={styles.detailContainer}>
-                    <ThemedText style={styles.detail}>Notes : {workout.exercise_description}</ThemedText>
                     <ThemedText style={styles.detail}>Sets : {workout.sets}</ThemedText>
                     <ThemedText style={styles.detail}>Reps : {workout.reps}</ThemedText>
                     <ThemedText style={styles.detail}>Weight : {workout.weight} {workout.weight_type}</ThemedText>
@@ -164,5 +166,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
         marginLeft: 10,
+    },
+    justForBorder: {
+        borderColor: "#ddd",
+        borderWidth: 0.3,
+        marginBottom: 10,
     },
 });
