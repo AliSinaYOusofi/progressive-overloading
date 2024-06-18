@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import WorkoutCard from '@/components/cards/Workout';
@@ -41,7 +40,7 @@ export default function TabTwoScreen() {
         setWorkouts(result.reverse());
       } catch (error) {
         console.error("Error fetching progressive_overloading workouts", error);
-        ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT);
+        // ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT);
       }
     };
 

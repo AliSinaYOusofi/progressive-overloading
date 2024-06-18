@@ -19,7 +19,6 @@ export default function HomeScreen() {
 
   useEffect( () => {
     const createTable = async () : Promise<void> => {
-
         try {
             await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,8 +36,7 @@ export default function HomeScreen() {
                 acheived INTEGER
             );`)
 
-            console.log("table created")
-            
+            console.log("progressive overloading created")
         } 
         
         catch (error) {
@@ -85,7 +83,8 @@ export default function HomeScreen() {
     createNotesTable()
     createGoalTable()
     createTable()
-}, [])
+  }, [])
+
   return (
     <ParallaxScrollView 
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}

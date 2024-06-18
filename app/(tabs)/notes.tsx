@@ -24,7 +24,7 @@ export default function Notes() {
                 console.log("goals ", result);
             } catch (error) {
                 console.error("failed to fetch data ", error);
-                ToastAndroid.show("failed to fetch data", ToastAndroid.LONG);
+                // ToastAndroid.show("failed to fetch data", ToastAndroid.LONG);
             }
         };
         fetchGoals();

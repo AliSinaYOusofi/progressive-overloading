@@ -27,7 +27,7 @@ export default function WorkoutTracker() {
                 setWorkouts(result.reverse())
             } catch (error) {
                 console.error("error fetching progressive_overloading workouts", error)
-                ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT)
+                // ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT)
             }
         }
 

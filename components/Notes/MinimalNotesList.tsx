@@ -24,7 +24,7 @@ export default function MinimalNotesList() {
                 setNotes(result.reverse())
             } catch (error) {
                 console.error("failed to fetch data ", error)
-                ToastAndroid.show("failed to fetch data ", ToastAndroid.LONG)
+                // ToastAndroid.show("failed to fetch data ", ToastAndroid.LONG)
             }
         }
         fetchNotes()
