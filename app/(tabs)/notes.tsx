@@ -1,7 +1,7 @@
 import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, ToastAndroid, View } from 'react-native'
+import { StyleSheet} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import { notes } from '@/components/Notes/AddNotesPopup'
 import { progressive_overloading } from '@/db/sqlitedb'
@@ -24,7 +24,6 @@ export default function Notes() {
                 console.log("goals ", result);
             } catch (error) {
                 console.error("failed to fetch data ", error);
-                // ToastAndroid.show("failed to fetch data", ToastAndroid.LONG);
             }
         };
         fetchGoals();

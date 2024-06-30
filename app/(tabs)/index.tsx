@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, ToastAndroid } from 'react-native';
+import { Image, StyleSheet, ToastAndroid } from 'react-native';
 import WorkoutTracker from '../../components/home/WorkoutTracker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { useEffect, useState } from 'react';
@@ -21,19 +21,19 @@ export default function HomeScreen() {
     const createTable = async () : Promise<void> => {
         try {
             await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS progressive_overloading (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                exercise_name TEXT,
-                exercise_description TEXT,
-                sets INTEGER,
-                reps INTEGER,
-                weight INTEGER,
-                weight_type TEXT,
-                future_sets INTEGER,
-                future_reps INTEGER,
-                future_weight INTEGER,
-                created TIMESTAMP,
-                updated TIMESTAMP,
-                acheived INTEGER
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              exercise_name TEXT,
+              exercise_description TEXT,
+              sets INTEGER,
+              reps INTEGER,
+              weight INTEGER,
+              weight_type TEXT,
+              future_sets INTEGER,
+              future_reps INTEGER,
+              future_weight INTEGER,
+              created TIMESTAMP,
+              updated TIMESTAMP,
+              acheived INTEGER
             );`)
 
             console.log("progressive overloading created")
@@ -48,17 +48,17 @@ export default function HomeScreen() {
     const createGoalTable = async () : Promise<void> => {
       try {
 
-          await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              goal_title TEXT,
-              description TEXT,
-              complete_in TEXT,
-              time_to_complete TIMESTAMP,
-              created TIMESTAMP,
-              updated TIMESTAMP,
-              acheived INTEGER
-          )`)
-          console.log("goals table created")
+        await progressive_overloading.execAsync(`CREATE TABLE IF NOT EXISTS goals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            goal_title TEXT,
+            description TEXT,
+            complete_in TEXT,
+            time_to_complete TIMESTAMP,
+            created TIMESTAMP,
+            updated TIMESTAMP,
+            acheived INTEGER
+        )`)
+        console.log("goals table created")
       } catch (error) {
         console.error("error creating goals table", error)
         ToastAndroid.show("error creating goals table", ToastAndroid.LONG)
