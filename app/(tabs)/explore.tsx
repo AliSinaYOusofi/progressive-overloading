@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, useColorScheme } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import WorkoutCard from '@/components/cards/Workout';
@@ -40,7 +40,6 @@ export default function TabTwoScreen() {
         setWorkouts(result.reverse());
       } catch (error) {
         console.error("Error fetching progressive_overloading workouts", error);
-        // ToastAndroid.show("Error fetching workouts", ToastAndroid.SHORT);
       }
     };
 
@@ -137,6 +136,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'black', // default text color for buttons
+    color: 'black'
   },
 });

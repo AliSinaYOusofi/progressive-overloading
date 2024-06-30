@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, ToastAndroid, useColorScheme } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, useColorScheme } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import GoalCard from '@/components/home/GoalsList';
@@ -10,7 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import AchievedGoalsCard from '@/components/cards/AcheivedGoalsCard';
 import NoAcheviedGoalsCard from '@/components/cards/NoAcheviedGoalsCard';
-import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-1665900038997295/9829014595';
 export type Goal = {
     id: number,
@@ -25,11 +25,13 @@ export type Goal = {
 }
 
 export default function Goals() {
+    
     const [goals, setGoals] = useState<Goal[]>([]);
     const [view, setView] = useState<'inProgress' | 'achieved'>('inProgress');
     const { refreshGoalsDatabase } = useAppContext();
     const colorScheme = useColorScheme();
     const bannerRef = useRef(null);
+    
     useEffect(() => {
         const fetchGoals = async (): Promise<void> => {
             try {
